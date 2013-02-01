@@ -4,6 +4,7 @@
 
 require_relative 'utility.rb'
 require_relative 'player.rb'
+require_relative 'point.rb'
 
 include Utility
 
@@ -19,6 +20,17 @@ class MysteryForest
       print "> "
       @cmmnd = gets.chomp
       clear_screen
+
+      case @cmmnd
+      when "n"
+        Player.move_by Point::NORTH
+      when "s"
+        Player.move_by Point::SOUTH
+      when "w"
+        Player.move_by Point::WEST
+      when "e"
+        Player.move_by Point::EAST
+      end
     end
   end
 end

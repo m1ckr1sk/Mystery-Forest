@@ -15,5 +15,11 @@ module Player
   def current_room
     World.room_at @location
   end
+
+  # add a point to the current player location
+  def move_by point
+    @location.x += point.x
+    @location.y += point.y
+  end
 end
 

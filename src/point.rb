@@ -25,5 +25,10 @@ class Point
   end
 
   alias == eql?
+
+  NORTH = Point.new(0, 1)
+  SOUTH = Point.new(0, -1)
+  WEST = Point.new(-1, 0)
+  EAST = Point.new(1, 0)
 end
 
