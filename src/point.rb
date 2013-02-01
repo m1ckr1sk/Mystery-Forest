@@ -10,6 +10,11 @@ class Point
     @y = y
   end
 
+  def + o
+    raise TypeError unless o.is_a?(Point)
+    Point.new(@x + o.x, @y + o.y)
+  end
+
   def to_s
     "(#{@x}, #{@y})"
   end

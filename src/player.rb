@@ -18,8 +18,7 @@ module Player
 
   # add a point to the current player location
   def move_by point
-    @location.x += point.x
-    @location.y += point.y
+    @location += point
   end
 end
 
