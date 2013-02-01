@@ -15,7 +15,7 @@ class MysteryForest
   def run
     clear_screen
     while @cmmnd != "quit" do
-      puts Player.current_room
+      puts Player.current_room.description
       print "> "
       @cmmnd = gets.chomp
       clear_screen
