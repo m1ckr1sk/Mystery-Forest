@@ -5,11 +5,12 @@
 # - inventory
 
 require_relative 'world.rb'
+require_relative 'point.rb'
 
 module Player
   extend self
 
-  @location = 0
+  @location = Point.new(0, 0)
 
   def current_room
     World.room_at @location
