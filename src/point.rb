@@ -15,11 +15,15 @@ class Point
   end
 
   def eql? o
-    @x == o.x && @y == o.y
+    self.class.equal?(o.class) &&
+      @x == o.x &&
+      @y == o.y
   end
 
   def hash
     to_s.hash
   end
+
+  alias == eql?
 end
 
