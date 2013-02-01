@@ -5,23 +5,24 @@
 require_relative 'utility.rb'
 require_relative 'player.rb'
 require_relative 'point.rb'
+require_relative 'command.rb'
 
 include Utility
 
 class MysteryForest
   def initialize
-    @cmmnd = ""
+    @cmmnd = Command.new
   end
 
   def run
     clear_screen
-    while @cmmnd != "quit" do
+    while @cmmnd.to_s != "quit" do
       puts Player.current_room.description
       print "> "
-      @cmmnd = gets.chomp
+      @cmmnd = Command.translate gets.chomp
       clear_screen
 
-      case @cmmnd
+      case @cmmnd.to_s
       when "n"
         Player.move_by Point::NORTH
       when "s"
