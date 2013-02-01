@@ -21,7 +21,7 @@ class Point
   end
 
   def hash
-    to_s.hash
+    "(#{@x}, #{@y})".hash
   end
 
   alias == eql?
