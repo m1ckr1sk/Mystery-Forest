@@ -3,6 +3,7 @@
 # The game engine
 
 require_relative 'utility.rb'
+require_relative 'player.rb'
 
 include Utility
 
@@ -14,6 +15,7 @@ class MysteryForest
   def run
     clear_screen
     while @cmmnd != "quit" do
+      puts Player.current_room
       print "> "
       @cmmnd = gets.chomp
       clear_screen
