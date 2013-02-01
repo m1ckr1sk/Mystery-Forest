@@ -12,8 +12,34 @@ class Command
   end
 
   def self.translate str
+    synonyms = {
+      "n" => "north",
+      "s" => "south",
+      "w" => "west",
+      "e" => "east",
+      "q" => "quit"
+    }
+
+    # replace synonyms with the expected word
+    for k, v in synonyms do
+      str.gsub!(/\b#{k}\b/, v)
+    end
+
+    case str
+    when "east"
+      str = "move east"
+    when "west"
+      str = "move west"
+    when "north"
+      str = "move north"
+    when "south"
+      str = "move south"
+    end
+
+    words = str.split("\s")
+
     # split the string on whitespace
-    Command.new str.split("\s")
+    Command.new words
   end
 end
 

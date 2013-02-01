@@ -23,13 +23,13 @@ class MysteryForest
       clear_screen
 
       case @cmmnd.to_s
-      when "n"
+      when "move north"
         Player.move_by Point::NORTH
-      when "s"
+      when "move south"
         Player.move_by Point::SOUTH
-      when "w"
+      when "move west"
         Player.move_by Point::WEST
-      when "e"
+      when "move east"
         Player.move_by Point::EAST
       end
     end

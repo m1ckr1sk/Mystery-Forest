@@ -18,7 +18,7 @@ module Player
 
   # add a point to the current player location
   def move_by point
-    @location += point
+    @location += point if World.room_at(@location + point)
   end
 end
 
