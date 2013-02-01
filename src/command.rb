@@ -3,6 +3,17 @@
 # Class to store user commands
 
 class Command
+  class Token
+    def initialize value, types=[:unknown]
+      @value = value
+      @type = types
+    end
+
+    def to_s
+      @value
+    end
+  end
+
   def initialize(tokens = [])
     @tokens = tokens
   end
@@ -36,10 +47,26 @@ class Command
       str = "move south"
     end
 
+    verb = %w( move )
+    direction = %w( move )
+    noun = %w( )
+    noun += direction
+
     words = str.split("\s")
+
+    words.collect! do |word|
+      types = []
+
+      types << :verb if verb.include? word
+      types << :noun if verb.include? word
+      types << :direction if verb.include? word
+
+      types = [:unknown] if types.empty?
+
+      Token.new(word, types)
+    end
 
     # split the string on whitespace
     Command.new words
   end
 end
-
