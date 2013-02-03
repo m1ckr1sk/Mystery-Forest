@@ -18,6 +18,9 @@ class MysteryForest
     clear_screen
     while @cmmnd.to_s != "quit" do
       puts Player.current_room.description
+
+      room_items = Player.current_room.items
+      puts "You see: " + room_items.collect { |item| item.name }.join(", ")
       print "> "
       @cmmnd = Command.translate gets.chomp
       clear_screen
