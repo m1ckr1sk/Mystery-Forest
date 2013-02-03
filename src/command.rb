@@ -18,6 +18,8 @@ class Command
 
   def initialize(tokens = [])
     @tokens = tokens
+    @verb = nil
+    @noun = nil
   end
 
   def at i
@@ -26,6 +28,31 @@ class Command
 
   def to_s
     @tokens.join(" ")
+  end
+
+  def has_next?
+    !@tokens.empty?
+  end
+
+  def next
+    target = [@tokens.shift]
+
+    if target.first.types.include? :verb then
+      @verb = target.shift
+    else
+      if target.first.types.include? :direction then
+        @verb = Token.new("move", [:verb]) if @verb.nil?
+      else
+        unless @tokens.empty? || @tokens[0].types.include?(:verb) then
+          target.push(@tokens.shift)
+        end
+      end
+    end
+
+    target.unshift @verb
+
+    p target
+    Command.new(target)
   end
 
   def self.translate str
@@ -39,7 +66,8 @@ class Command
       "q" => "quit",
       "pick up" => "take",
       "get" => "take",
-      "i" => "inventory"
+      "i" => "inventory",
+      "and" => ""
     }
 
     # replace synonyms with the expected word
@@ -47,23 +75,12 @@ class Command
       str.gsub!(/\b#{k}\b/, v)
     end
 
-    case str
-    when "east"
-      str = "move east"
-    when "west"
-      str = "move west"
-    when "north"
-      str = "move north"
-    when "south"
-      str = "move south"
-    end
-
     verb = %w( move take quit inventory )
     direction = %w( east west south north )
     noun = %w( )
     noun += direction
 
-    words = str.split("\s")
+    words = str.split(/\s+/)
 
     # a stack to keep track of unknown words
     unknown = []

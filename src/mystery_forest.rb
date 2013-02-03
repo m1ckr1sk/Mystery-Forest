@@ -18,13 +18,15 @@ class MysteryForest
   # the main game loop
   def run
     clear_screen
-    while @cmmnd.to_s != "quit" do
+    loop do
       print_room Player.current_room
 
       @cmmnd = get_input
       clear_screen
 
-      perform_action @cmmnd
+      while @cmmnd.has_next? do
+        perform_action @cmmnd.next
+      end
     end
   end
 
@@ -61,6 +63,9 @@ class MysteryForest
         Player.take_item item.value
         Player.current_room.items.delete item.value
       end
+    when "quit"
+      puts "Thanks for playing!"
+      exit
     when "inventory"
       puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
     end
