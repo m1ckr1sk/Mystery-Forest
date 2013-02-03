@@ -55,7 +55,7 @@ class Command
     target.push @verb
 
     if first.types.include? :verb then
-      @@words.unshift(first.value)
+      @@words.unshift(first.value) if first != @verb
     else
       target.push first
     end
@@ -89,40 +89,48 @@ class Command
 
   private
   def self.next_token
-    verb = %w( move take quit inventory )
-    direction = %w( east west south north )
-    noun = %w( )
-    noun += direction
+    possible_types = {
+      verb: %w( move take quit inventory ),
+      direction: %w( east west south north ),
+      noun: %w( )
+    }
+
+    possible_types[:noun] += possible_types[:direction]
 
     # a stack to keep track of unknown words
     unknown = []
+    # the token returned
+    token = nil
 
-    for word in @@words do
+    until token do
+      word = @@words.shift
       types = []
       value = word
 
-      types.push(:verb) if verb.include? word
-      types.push(:noun) if noun.include? word
-      types.push(:direction) if direction.include? word
+      for type, keywords in possible_types do
+        types.push(type) if keywords.include? word
+      end
 
       for item in Player.current_room.items do
         if item.name.downcase == word then
-          types.push(:noun)
-          types.push(:item)
           value = item
+          types += [:noun, :item]
           break
         end
       end
 
-      @@words.shift
       if types.empty? then
         unknown.push(word)
+
+        if @@words.empty? then
+          token = Token.new(unknown.join(" "), [:unknwon])
+        end
       else
-        return Token.new(value, types)
+        token = Token.new(value, types)
       end
     end
 
-    Token.new(unknown.join(" "), [:unknown])
+    token
   end
 
 end
