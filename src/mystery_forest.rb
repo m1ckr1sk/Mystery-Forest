@@ -20,7 +20,10 @@ class MysteryForest
       puts Player.current_room.description
 
       room_items = Player.current_room.items
-      puts "You see: " + room_items.collect { |item| item.name }.join(", ")
+      unless room_items.empty? then
+        puts "You see: " + room_items.collect { |item| item.name }.join(", ")
+      end
+
       print "> "
       @cmmnd = Command.translate gets.chomp
       clear_screen
