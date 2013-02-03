@@ -90,7 +90,7 @@ class Command
   private
   def self.next_token
     possible_types = {
-      verb: %w( move take quit inventory ),
+      verb: %w( move take quit inventory drop ),
       direction: %w( east west south north ),
       noun: %w( )
     }
@@ -114,7 +114,15 @@ class Command
       for item in Player.current_room.items do
         if item.name.downcase == word then
           value = item
-          types += [:noun, :item]
+          types += [:noun, :item, :room]
+          break
+        end
+      end
+
+      for item in Player.items do
+        if item.name.downcase == word then
+          value = item
+          types += [:noun, :item, :inventory]
           break
         end
       end

@@ -28,5 +28,9 @@ module Player
   def take_item item
     @items.push item
   end
+
+  def drop_item item
+    @items.delete item
+  end
 end
 

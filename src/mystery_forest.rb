@@ -60,9 +60,18 @@ class MysteryForest
     when /^take (.*)$/
       item = command.at(1)
 
-      if item.types.include? :item then
+      if item.types.include?(:item) && item.types.include?(:room) then
+        puts "You take the #{item.to_s}."
         Player.take_item item.value
         Player.current_room.items.delete item.value
+      end
+    when /^drop (.*)$/
+      item = command.at(1)
+
+      if item.types.include?(:item) && item.types.include?(:inventory) then
+        puts "You drop the #{item.to_s}."
+        Player.drop_item item.value
+        Player.current_room.items.push item.value
       end
     when "quit"
       puts "Thanks for playing!"
