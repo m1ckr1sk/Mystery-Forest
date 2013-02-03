@@ -11,5 +11,9 @@ class Item
     @name = name
     @description = description
   end
+
+  def to_s
+    name.downcase
+  end
 end
 

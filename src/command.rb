@@ -4,18 +4,24 @@
 
 class Command
   class Token
+    attr_accessor :value, :types
+
     def initialize value, types=[:unknown]
       @value = value
-      @type = types
+      @types = types
     end
 
     def to_s
-      @value
+      @value.to_s
     end
   end
 
   def initialize(tokens = [])
     @tokens = tokens
+  end
+
+  def at i
+    @tokens[i]
   end
 
   def to_s
@@ -64,6 +70,8 @@ class Command
 
     for word in words do
       types = []
+      value = word
+
       types.push(:verb) if verb.include? word
       types.push(:noun) if noun.include? word
       types.push(:direction) if direction.include? word
@@ -72,6 +80,8 @@ class Command
         if item.name.downcase == word then
           types.push(:noun)
           types.push(:item)
+          value = item
+          break
         end
       end
 
@@ -79,7 +89,7 @@ class Command
         unknown.push(word)
       else
         unknown = []
-        tokens.push(Token.new(word, types));
+        tokens.push(Token.new(value, types));
       end
     end
 

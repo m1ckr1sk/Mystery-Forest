@@ -57,6 +57,12 @@ class MysteryForest
     when "move east"
       Player.move_by Point::EAST
     when /^take (.*)$/
+      item = command.at(1)
+
+      if item.types.include? :item then
+        Player.take_item item.value
+        Player.current_room.items.delete item.value
+      end
     end
   end
 end
