@@ -122,7 +122,7 @@ class Command
       end
     end
 
-    Token.new(uknown.join(" "), [:unknown])
+    Token.new(unknown.join(" "), [:unknown])
   end
 
 end
