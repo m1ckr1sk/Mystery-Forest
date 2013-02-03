@@ -16,12 +16,12 @@ module Player
   @items = []
 
   def current_room
-    World.room_at @location
+    World.instance.room_at @location
   end
 
   # add a point to the current player location
   def move_by point
-    @location += point if World.room_at(@location + point)
+    @location += point if World.instance.room_at(@location + point)
   end
 
   # put an item in the player's inventory

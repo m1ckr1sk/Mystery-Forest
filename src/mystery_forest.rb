@@ -34,6 +34,10 @@ class MysteryForest
   def print_room room
     puts room.description
 
+    #print directions you can go
+    puts "You can go: " + room.directions.join(", ")
+
+    # print items in the room
     unless room.items.empty? then
       puts "You see: " + room.items.collect { |item| item.name }.join(", ")
     end

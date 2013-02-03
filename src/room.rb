@@ -5,10 +5,15 @@
 # - items
 
 class Room
-  attr_accessor :description, :items
+  attr_accessor :description, :items, :directions
 
   def initialize descr, items=[]
     @description = descr
     @items = items
+    @directions = []
+  end
+
+  def add_direction dir
+    @directions.push(dir)
   end
 end
