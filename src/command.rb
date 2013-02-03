@@ -16,6 +16,8 @@ class Command
     end
   end
 
+  @@words = ""
+
   def initialize(tokens = [])
     @tokens = tokens
     @verb = nil
@@ -31,31 +33,38 @@ class Command
   end
 
   def has_next?
-    !@tokens.empty?
+    !@@words.empty?
   end
 
   def next
-    target = [@tokens.shift]
+    target = []
+    first = Command.next_token
 
-    if target.first.types.include? :verb then
-      @verb = target.shift
+    if first.types.include? :verb then
+      @verb = first
+
+      if has_next? then
+        first = Command.next_token
+      end
     else
-      if target.first.types.include? :direction then
+      if first.types.include? :direction then
         @verb = Token.new("move", [:verb]) if @verb.nil?
-      else
-        unless @tokens.empty? || @tokens[0].types.include?(:verb) then
-          target.push(@tokens.shift)
-        end
       end
     end
 
-    target.unshift @verb
+    target.push @verb
+
+    if first.types.include? :verb then
+      @@words.unshift(first.value)
+    else
+      target.push first
+    end
 
     p target
     Command.new(target)
   end
 
-  def self.translate str
+  def self.store str
     str.downcase!
 
     synonyms = {
@@ -75,18 +84,20 @@ class Command
       str.gsub!(/\b#{k}\b/, v)
     end
 
+    @@words = str.split(/\s+/)
+  end
+
+  private
+  def self.next_token
     verb = %w( move take quit inventory )
     direction = %w( east west south north )
     noun = %w( )
     noun += direction
 
-    words = str.split(/\s+/)
-
     # a stack to keep track of unknown words
     unknown = []
-    tokens = []
 
-    for word in words do
+    for word in @@words do
       types = []
       value = word
 
@@ -103,14 +114,15 @@ class Command
         end
       end
 
+      @@words.shift
       if types.empty? then
         unknown.push(word)
       else
-        unknown = []
-        tokens.push(Token.new(value, types));
+        return Token.new(value, types)
       end
     end
 
-    Command.new tokens
+    Token.new(uknown.join(" "), [:unknown])
   end
+
 end

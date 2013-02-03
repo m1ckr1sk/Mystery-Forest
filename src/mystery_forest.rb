@@ -21,9 +21,10 @@ class MysteryForest
     loop do
       print_room Player.current_room
 
-      @cmmnd = get_input
+      get_input
       clear_screen
 
+      @cmmnd = Command.new()
       while @cmmnd.has_next? do
         perform_action @cmmnd.next
       end
@@ -48,7 +49,7 @@ class MysteryForest
   # get the user input
   def get_input
     print "> "
-    Command.translate gets.chomp
+    Command.store gets.chomp
   end
 
   # perform an action based on a Command
