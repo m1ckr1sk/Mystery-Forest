@@ -31,25 +31,22 @@ class World
   private
   def create_room x, y, descr, items=[]
     r = Room.new(descr, items)
+    p = Point.new(x, y)
+    opp = {
+      east: :west,
+      west: :east,
+      south: :north,
+      north: :south
+    }
 
-    if room_at Point.new(x + 1, y) then
-      r.add_direction(:east)
-      room_at(Point.new(x + 1, y)).add_direction(:west)
-    end
-    if room_at Point.new(x - 1, y) then
-      r.add_direction(:west)
-      room_at(Point.new(x - 1, y)).add_direction(:east)
-    end
-    if room_at Point.new(x, y + 1) then
-      r.add_direction(:north)
-      room_at(Point.new(x, y + 1)).add_direction(:south)
-    end
-    if room_at Point.new(x, y - 1) then
-      r.add_direction(:south)
-      room_at(Point.new(x, y - 1)).add_direction(:north)
+    for direction, point in Point::DIRECTIONS do
+      if room_at(p + point) then
+        r.add_direction(direction)
+        room_at(p + point).add_direction(opp[direction])
+      end
     end
     
-    @rooms[Point.new(x, y)] = r
+    @rooms[p] = r
   end
 end
 

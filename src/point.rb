@@ -32,10 +32,10 @@ class Point
   alias == eql?
 
   DIRECTIONS = {
-    :north => Point.new(0, 1),
-    :south => Point.new(0, -1),
-    :west => Point.new(-1, 0),
-    :east => Point.new(1, 0)
+    north: Point.new(0, 1),
+    south: Point.new(0, -1),
+    west: Point.new(-1, 0),
+    east: Point.new(1, 0)
   }
 end
 
