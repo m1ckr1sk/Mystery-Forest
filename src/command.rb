@@ -48,7 +48,7 @@ class Command
       end
     else
       if first.types.include? :direction then
-        @verb = Token.new("move", [:verb]) if @verb.nil?
+        @verb = Token.new("move", [:verb])
       end
     end
 
@@ -76,7 +76,11 @@ class Command
       "pick up" => "take",
       "get" => "take",
       "i" => "inventory",
-      "and" => ""
+      "look at" => "look",
+      "examine" => "look",
+      "x" => "look",
+
+      "and" => "",
     }
 
     # replace synonyms with the expected word
@@ -90,7 +94,7 @@ class Command
   private
   def self.next_token
     possible_types = {
-      verb: %w( move take quit inventory drop ),
+      verb: %w( move take quit inventory drop look ),
       direction: %w( east west south north ),
       noun: %w( )
     }

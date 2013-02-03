@@ -76,6 +76,12 @@ class MysteryForest
     when "quit"
       puts "Thanks for playing!"
       exit
+    when /^look (.*)$/
+      item = command.at(1)
+      
+      if item.types.include?(:item) then
+        puts item.value.description
+      end
     when "inventory"
       puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
     end
