@@ -11,33 +11,51 @@ include Utility
 
 class MysteryForest
   def initialize
+    # command to be performed
     @cmmnd = Command.new
   end
 
+  # the main game loop
   def run
     clear_screen
     while @cmmnd.to_s != "quit" do
-      puts Player.current_room.description
+      print_room Player.current_room
 
-      room_items = Player.current_room.items
-      unless room_items.empty? then
-        puts "You see: " + room_items.collect { |item| item.name }.join(", ")
-      end
-
-      print "> "
-      @cmmnd = Command.translate gets.chomp
+      @cmmnd = get_input
       clear_screen
 
-      case @cmmnd.to_s
-      when "move north"
-        Player.move_by Point::NORTH
-      when "move south"
-        Player.move_by Point::SOUTH
-      when "move west"
-        Player.move_by Point::WEST
-      when "move east"
-        Player.move_by Point::EAST
-      end
+      perform_action @cmmnd
+    end
+  end
+
+  # print the room information
+  # a short description
+  # the items if any
+  def print_room room
+    puts room.description
+
+    unless room.items.empty? then
+      puts "You see: " + room.items.collect { |item| item.name }.join(", ")
+    end
+  end
+
+  # get the user input
+  def get_input
+    print "> "
+    Command.translate gets.chomp
+  end
+
+  # perform an action based on a Command
+  def perform_action command
+    case command.to_s
+    when "move north"
+      Player.move_by Point::NORTH
+    when "move south"
+      Player.move_by Point::SOUTH
+    when "move west"
+      Player.move_by Point::WEST
+    when "move east"
+      Player.move_by Point::EAST
     end
   end
 end
