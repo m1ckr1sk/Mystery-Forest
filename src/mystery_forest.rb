@@ -63,6 +63,8 @@ class MysteryForest
         Player.take_item item.value
         Player.current_room.items.delete item.value
       end
+    when "inventory"
+      puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
     end
   end
 end

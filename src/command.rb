@@ -38,7 +38,8 @@ class Command
       "e" => "east",
       "q" => "quit",
       "pick up" => "take",
-      "get" => "take"
+      "get" => "take",
+      "i" => "inventory"
     }
 
     # replace synonyms with the expected word
@@ -57,7 +58,7 @@ class Command
       str = "move south"
     end
 
-    verb = %w( move take quit )
+    verb = %w( move take quit inventory )
     direction = %w( east west south north )
     noun = %w( )
     noun += direction

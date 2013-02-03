@@ -8,6 +8,8 @@ require_relative 'world.rb'
 require_relative 'point.rb'
 
 module Player
+  attr_accessor :items
+
   extend self
 
   @location = Point.new(0, 0)
