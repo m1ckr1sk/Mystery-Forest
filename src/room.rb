@@ -5,9 +5,10 @@
 # - items
 
 class Room
-  attr_accessor :description
+  attr_accessor :description, :items
 
-  def initialize descr
+  def initialize descr, items=[]
     @description = descr
+    @items = items
   end
 end
