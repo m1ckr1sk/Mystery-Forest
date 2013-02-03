@@ -52,14 +52,8 @@ class MysteryForest
   # perform an action based on a Command
   def perform_action command
     case command.to_s
-    when "move north"
-      Player.move_by Point::NORTH
-    when "move south"
-      Player.move_by Point::SOUTH
-    when "move west"
-      Player.move_by Point::WEST
-    when "move east"
-      Player.move_by Point::EAST
+    when /^move (.*)$/
+      Player.move_by Point::DIRECTIONS[$1.to_sym]
     when /^take (.*)$/
       item = command.at(1)
 
