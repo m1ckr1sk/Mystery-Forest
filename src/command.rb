@@ -23,12 +23,16 @@ class Command
   end
 
   def self.translate str
+    str.downcase!
+
     synonyms = {
       "n" => "north",
       "s" => "south",
       "w" => "west",
       "e" => "east",
-      "q" => "quit"
+      "q" => "quit",
+      "pick up" => "take",
+      "get" => "take"
     }
 
     # replace synonyms with the expected word
@@ -47,26 +51,38 @@ class Command
       str = "move south"
     end
 
-    verb = %w( move )
-    direction = %w( move )
+    verb = %w( move take quit )
+    direction = %w( east west south north )
     noun = %w( )
     noun += direction
 
     words = str.split("\s")
 
-    words.collect! do |word|
+    # a stack to keep track of unknown words
+    unknown = []
+    tokens = []
+
+    for word in words do
       types = []
+      types.push(:verb) if verb.include? word
+      types.push(:noun) if noun.include? word
+      types.push(:direction) if direction.include? word
 
-      types << :verb if verb.include? word
-      types << :noun if verb.include? word
-      types << :direction if verb.include? word
+      for item in Player.current_room.items do
+        if item.name.downcase == word then
+          types.push(:noun)
+          types.push(:item)
+        end
+      end
 
-      types = [:unknown] if types.empty?
-
-      Token.new(word, types)
+      if types.empty? then
+        unknown.push(word)
+      else
+        unknown = []
+        tokens.push(Token.new(word, types));
+      end
     end
 
-    # split the string on whitespace
-    Command.new words
+    Command.new tokens
   end
 end

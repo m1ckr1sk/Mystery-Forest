@@ -56,6 +56,7 @@ class MysteryForest
       Player.move_by Point::WEST
     when "move east"
       Player.move_by Point::EAST
+    when /^take (.*)$/
     end
   end
 end
