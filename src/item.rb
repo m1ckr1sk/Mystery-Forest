@@ -7,9 +7,14 @@
 class Item
   attr_accessor :name, :description
 
-  def initialize name, description
+  def initialize name, possible_names, description
     @name = name
+    @possible_names = possible_names
     @description = description
+  end
+
+  def id_by? str
+    @possible_names.include? str
   end
 
   def to_s

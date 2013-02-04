@@ -115,22 +115,32 @@ class Command
         types.push(type) if keywords.include? word
       end
 
-      for item in Player.current_room.items do
-        if item.name.downcase == word then
-          value = item
-          types += [:noun, :item, :room]
-          break
+      check_item = find_item(value)
+      if check_item then
+        check_still_item = check_item
+        while unknown.length > 0 && check_still_item do
+          value = unknown.pop + " " + value
+          check_still_item = find_item(value)
+          check_item = check_still_item if check_still_item
+        end
+
+        # unknown is empty
+        if check_still_item then
+          types = check_still_item.types
+          value = check_still_item.value
+        else
+          words = value.split(/\s+/)
+          unknown.push words.shift
+
+          for word in words.reverse do
+            @@words.unshift word
+          end
+
+          types = [:unknown]
+          value = unknown.join(" ")
         end
       end
-
-      for item in Player.items do
-        if item.name.downcase == word then
-          value = item
-          types += [:noun, :item, :inventory]
-          break
-        end
-      end
-
+      
       if types.empty? then
         unknown.push(word)
 
@@ -143,6 +153,26 @@ class Command
     end
 
     token
+  end
+
+  # returns a token if a word describes an inventory item
+  #   or item in the current room
+  def self.find_item name
+    # check the current room
+    for item in Player.current_room.items do
+      if item.id_by? name then
+        return Token.new(item, [:noun, :item, :room])
+      end
+    end
+
+    # check the player inventory
+    for item in Player.items do
+      if item.id_by? name then
+        return Token.new(item, [:noun, :item, :inventory])
+      end
+    end
+
+    nil
   end
 
 end
