@@ -18,6 +18,7 @@ class MysteryForest
   # the main game loop
   def run
     clear_screen
+    puts "You are walking around a park one day when a heavy mist settles in, obscuring your vision. You walk around, trying to find the path back, but you no longer recognize where you are."
     loop do
       print_room Player.current_room
 

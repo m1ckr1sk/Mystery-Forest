@@ -15,13 +15,13 @@ class World
   def initialize
     @rooms = {}
 
-    create_room(0, 0, "You are standing on the south-west veranda.")
+    create_room(0, 0, "The mist slowy swirls around you and curls around the trees.")
 
-    create_room(0, 1, "You are standing on the north-west veranda.", [
-        Item.new("Dagger", "A short, metal dagger.")
+    create_room(0, 1, "You seem to be in an area where the layers of mist have thinned a little, the forest is marked by dull shadows of surrounding trees.", [
+        Item.new("Iron Dagger", "A short, metal dagger.")
     ])
-    create_room(1, 0, "You are standing on the south-east veranda.")
-    create_room(1, 1, "You are standing on the north-east veranda.")
+    create_room(1, 0, "The mist is as thick as ever, a dense, white sheet.")
+    create_room(1, 1, "There must be a clearing in the trees here, you can see a halo where the sun must be shining from above.")
   end
 
   def room_at c
