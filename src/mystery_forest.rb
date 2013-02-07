@@ -50,7 +50,7 @@ class MysteryForest
   # get the user input
   def get_input
     print "> "
-    Command.store gets.chomp
+    Command.store $stdin.gets.chomp
   end
 
   # perform an action based on a Command
@@ -88,6 +88,8 @@ class MysteryForest
     end
   end
 end
+
+$debug = ARGV.include?("debug")
 
 game = MysteryForest.new()
 

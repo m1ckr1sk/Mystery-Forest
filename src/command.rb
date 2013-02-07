@@ -60,7 +60,7 @@ class Command
       target.push first
     end
 
-    p target
+    p target if $debug
     Command.new(target)
   end
 
