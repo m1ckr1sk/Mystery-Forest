@@ -13,6 +13,9 @@ class MysteryForest
   def initialize
     # command to be performed
     @cmmnd = Command.new
+    @triggers = {
+      trip_root: 0
+    }
   end
 
   # the main game loop
@@ -28,6 +31,7 @@ class MysteryForest
       @cmmnd = Command.new()
       while @cmmnd.has_next? do
         perform_action @cmmnd.next
+        perform_triggers
       end
     end
   end
@@ -85,6 +89,17 @@ class MysteryForest
       end
     when "inventory"
       puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
+    end
+  end
+
+  # triggers are things that happen when a certain action is triggered
+  # by an event, such as a player moving to a new room for the first time
+  def perform_triggers
+    if @triggers[:trip_root] == 0 then
+      if Player.location == Point.new(2, 1) then
+        puts "You trip over a root, grabbing out to a tree to keep your balance."
+        @triggers[:trip_root] += 1
+      end
     end
   end
 end

@@ -8,7 +8,7 @@ require_relative 'world.rb'
 require_relative 'point.rb'
 
 module Player
-  attr_accessor :items
+  attr_accessor :location, :items
 
   extend self
 
