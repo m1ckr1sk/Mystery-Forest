@@ -22,6 +22,8 @@ class World
     ])
     create_room(1, 0, "The mist is as thick as ever, a dense, white sheet.")
     create_room(1, 1, "There must be a clearing in the trees here, you can see a halo where the sun must be shining from above.")
+    create_room(2, 1, "You think you can see a faint path beneath the mist.")
+    create_room(3, 1, "The mist drapes over yourself and the trees, creating a heavy blanket.")
   end
 
   def room_at c
