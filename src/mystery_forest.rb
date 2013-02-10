@@ -121,7 +121,7 @@ class MysteryForest
   def update_hints command
     if @hints[:moved] == 0 && (Player.location == Point.new(1, 0) || Player.location == Point.new(0, 1)) then
       @hints[:moved] += 1
-    elsif @hints[:talked] == 0 && command.to_s == "talk Malachi" then
+    elsif @hints[:talked] == 0 && command.to_s == "talk malachi" then
       @hints[:talked] += 1
     end
   end
