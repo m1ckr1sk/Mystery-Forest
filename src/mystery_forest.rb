@@ -16,6 +16,10 @@ class MysteryForest
     @triggers = {
       trip_root: 0
     }
+    @hints = {
+      moved: 0,
+      talked: 0
+    }
   end
 
   # the main game loop
@@ -30,8 +34,10 @@ class MysteryForest
 
       @cmmnd = Command.new()
       while @cmmnd.has_next? do
-        perform_action @cmmnd.next
-        perform_triggers
+        current_command = @cmmnd.next
+        perform_action current_command
+        perform_triggers current_command
+        update_hints current_command
       end
     end
   end
@@ -83,14 +89,16 @@ class MysteryForest
         Player.drop_item item.value
         Player.current_room.items.push item.value
       end
+    when "hint"
+      give_hint
     when "quit"
       puts "Thanks for playing!"
       exit
     when /^look (.*)$/
       item = command.at(1)
       
-      if item.types.include?(:item) then
-        puts item.value.description
+      if item.types.include?(:item) || item.types.include?(:person) then
+        puts format_output_wrap item.value.description
       end
     when "inventory"
       puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
@@ -99,12 +107,31 @@ class MysteryForest
 
   # triggers are things that happen when a certain action is triggered
   # by an event, such as a player moving to a new room for the first time
-  def perform_triggers
+  def perform_triggers command
     if @triggers[:trip_root] == 0 then
       if Player.location == Point.new(2, 1) then
         puts "You trip over a root, grabbing out to a tree to keep your balance."
         @triggers[:trip_root] += 1
       end
+    end
+  end
+
+  # update the hints so that it can give feedback for your current
+  # sitation in the game
+  def update_hints command
+    if @hints[:moved] == 0 && (Player.location == Point.new(1, 0) || Player.location == Point.new(0, 1)) then
+      @hints[:moved] += 1
+    elsif @hints[:talked] == 0 && command.to_s == "talk Malachi" then
+      @hints[:talked] += 1
+    end
+  end
+
+  # give out a hint for the player
+  def give_hint
+    if @hints[:moved] == 0 then
+      puts "Try typing 'move north' to walk the direction north."
+    elsif @hints[:talked] == 0 then
+      puts "Try finding someone to talk to."
     end
   end
 end

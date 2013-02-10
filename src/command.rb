@@ -94,7 +94,7 @@ class Command
   private
   def self.next_token
     possible_types = {
-      verb: %w( move take quit inventory drop look ),
+      verb: %w( move take quit inventory drop look hint),
       direction: %w( east west south north ),
       noun: %w( )
     }
@@ -138,6 +138,13 @@ class Command
 
           types = [:unknown]
           value = unknown.join(" ")
+        end
+      end
+
+      for person in Player.current_room.people do
+        if value == person.name.downcase then
+          types += [:person]
+          value = person
         end
       end
       
