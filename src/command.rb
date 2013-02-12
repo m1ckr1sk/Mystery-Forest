@@ -79,6 +79,7 @@ class Command
       "look at" => "look",
       "examine" => "look",
       "x" => "look",
+      "talk to" => "talk",
 
       "and" => "",
     }
@@ -94,7 +95,7 @@ class Command
   private
   def self.next_token
     possible_types = {
-      verb: %w( move take quit inventory drop look hint),
+      verb: %w( move take quit inventory drop look hint talk),
       direction: %w( east west south north ),
       noun: %w( )
     }

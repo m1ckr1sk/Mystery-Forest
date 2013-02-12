@@ -8,6 +8,11 @@ class Person
   def initialize name, description
     @name = name
     @description = description
+    @talk = "Hi"
+  end
+
+  def talk
+    puts @talk
   end
 end
 

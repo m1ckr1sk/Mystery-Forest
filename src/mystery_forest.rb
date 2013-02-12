@@ -100,6 +100,12 @@ class MysteryForest
       if item.types.include?(:item) || item.types.include?(:person) then
         puts format_output_wrap item.value.description
       end
+    when /^talk (.*)$/
+      person = command.at(1)
+
+      if person.types.include?(:person) then
+        person.value.talk
+      end
     when "inventory"
       puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
     end
