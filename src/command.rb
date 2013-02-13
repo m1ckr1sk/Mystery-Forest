@@ -93,6 +93,21 @@ class Command
   end
 
   private
+  # return the next token of the given words
+  #
+  # checks first for known types (verb, noun, direction)
+  #   returns a string
+  # checks for items next, if it finds an item search backward
+  #   to match as much of the description as possible
+  #   e.g. match 'rusty, iron dagger' instead of just 'dagger'
+  #   returns an item
+  # checks for people next
+  #   returns a person
+  #
+  # if a token is not found, it adds the current word to unknown
+  #   and tries the next word
+  # if the end of the input is reached and there is unknown words left
+  #   return the unkown words joined as a string
   def self.next_token
     possible_types = {
       verb: %w( move take quit inventory drop look hint talk),
@@ -100,7 +115,9 @@ class Command
       noun: %w( )
     }
 
+    # add directions to nouns since directions are nouns
     possible_types[:noun] += possible_types[:direction]
+
 
     # a stack to keep track of unknown words
     unknown = []
@@ -108,31 +125,43 @@ class Command
     token = nil
 
     until token do
+      # get the first word
       word = @@words.shift
+
+      # set the value to the word and the types as empty
       types = []
       value = word
 
+      # check if a word is one of the possible types
       for type, keywords in possible_types do
         types.push(type) if keywords.include? word
       end
 
+      # check if it is an item
       check_item = find_item(value)
-      if check_item then
-        check_still_item = check_item
-        while unknown.length > 0 && check_still_item do
+
+      # if it is an item and there were unknown words before the item
+      # try to see if adding the unknown words still identifies an item
+      # For example if 'dagger' matches an item, and 'iron' was unkown
+      # check that 'iron dagger' identifies an item
+      if check_item && !unknown.empty then
+        still_item = check_item
+        while unknown.length > 0 && still_item do
           value = unknown.pop + " " + value
-          check_still_item = find_item(value)
-          check_item = check_still_item if check_still_item
+          still_item = find_item(value)
+          check_item = still_item if still_item
         end
 
-        # unknown is empty
-        if check_still_item then
-          types = check_still_item.types
-          value = check_still_item.value
+        # if an item was found, unknown is empty
+        if still_item then
+          types = still_item.types
+          value = still_item.value
         else
+          # put the first word back onto unknown
           words = value.split(/\s+/)
           unknown.push words.shift
 
+          # put the rest of the words back
           for word in words.reverse do
             @@words.unshift word
           end
@@ -142,6 +171,7 @@ class Command
         end
       end
 
+      # check if a word is referring to a person
       for person in Player.current_room.people do
         if value == person.name.downcase then
           types += [:person]
@@ -149,6 +179,8 @@ class Command
         end
       end
       
+      # if the types are empty, the word is unknown
+      # otherwise return a token with the types and value
       if types.empty? then
         unknown.push(word)
 
@@ -165,6 +197,7 @@ class Command
 
   # returns a token if a word describes an inventory item
   #   or item in the current room
+  # returns a token if found, nil if not found
   def self.find_item name
     # check the current room
     for item in Player.current_room.items do
