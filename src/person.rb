@@ -14,5 +14,9 @@ class Person
   def talk
     puts @talk
   end
+
+  def to_s
+    @name.downcase
+  end
 end
 

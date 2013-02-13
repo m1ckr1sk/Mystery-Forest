@@ -144,7 +144,7 @@ class Command
       # try to see if adding the unknown words still identifies an item
       # For example if 'dagger' matches an item, and 'iron' was unkown
       # check that 'iron dagger' identifies an item
-      if check_item && !unknown.empty then
+      if check_item then
         still_item = check_item
         while unknown.length > 0 && still_item do
           value = unknown.pop + " " + value
