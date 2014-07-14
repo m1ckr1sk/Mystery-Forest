@@ -2,17 +2,18 @@
 # 2013.02.07
 # Represent a person
 
+require_relative 'script.rb'
+
 class Person
   attr_accessor :name, :description
 
   def initialize name, description
     @name = name
     @description = description
-    @talk = "Hi"
   end
 
   def talk
-    puts @talk
+    Script.run(@name)
   end
 
   def to_s
