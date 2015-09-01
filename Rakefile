@@ -4,10 +4,10 @@ end
 
 desc "Run the game."
 task :run do
-  sh "ruby src/mystery_forest.rb"
+  sh "ruby src/loader.rb"
 end
 
 desc "Run the game in debug mode."
 task :debug do
-  sh "ruby src/mystery_forest.rb debug"
+  sh "ruby src/loader.rb debug"
 end

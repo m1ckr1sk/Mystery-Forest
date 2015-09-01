@@ -1,21 +1,10 @@
 # Mark Harder
 # 2013.02.01
 # Class to store user commands
+require_relative 'token'
 
 class Command
-  class Token
-    attr_accessor :value, :types
-
-    def initialize value, types=[:unknown]
-      @value = value
-      @types = types
-    end
-
-    def to_s
-      @value.to_s
-    end
-  end
-
+  
   @@words = ""
 
   def initialize(tokens = [])

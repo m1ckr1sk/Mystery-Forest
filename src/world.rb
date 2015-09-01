@@ -16,7 +16,7 @@ class World
   def initialize
     @rooms = {}
 
-    create_room(0, 0, "The mist slowy swirls around you and curls around the trees, lazily forming silver streams.")
+    create_room(0, 0, "The mist slowly swirls around you and curls around the trees, lazily forming silver streams.")
 
     create_room(0, 1, "You seem to be in an area where the layers of mist have thinned a little, the forest is marked by dull shadows of surrounding trees. It's almost more foreboding to have tall shadows looming over you than just trees surrounded by mist.", [
       Item.new("Iron Dagger", ["iron dagger", "dagger"], "It is a short, metal dagger. The blade is flat, but sharp. The handle is plain and unadorned of any decoration except for a two circles.")

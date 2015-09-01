@@ -2,16 +2,14 @@
 # 2013.01.31
 # The game engine
 
-require_relative 'utility.rb'
-require_relative 'player.rb'
-require_relative 'point.rb'
-require_relative 'command.rb'
+require_relative 'player'
+require_relative 'point'
+require_relative 'command'
 require_relative 'wrapped_screen_output'
-
-include Utility
+require_relative 'stdin_input'
 
 class MysteryForest
-  def initialize(output)
+  def initialize(input, output)
     # command to be performed
     @cmmnd = Command.new
     @triggers = {
@@ -22,18 +20,20 @@ class MysteryForest
       talked: 0
     }
     @output = output
+    @input = input
+    @quit_game = false
   end
 
   # the main game loop
   def run
-    clear_screen
-    @output.send_output "You are walking around a park, enjoying the sunlight speckling the trees splendent in vibrant fall colors. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the color creeps away from your surroundings. As you begin to register the lack of color, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognize where you are."
-    loop do
+    @output.clear
+    @output.send_output "You are walking around a park, enjoying the sunlight speckling the trees resplendent in vibrant fall colours. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the colour creeps away from your surroundings. As you begin to register the lack of colour, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognise where you are."
+    while !@quit_game do
       @output.send_output ''
       print_room Player.current_room
 
       get_input
-      clear_screen
+      @output.clear
 
       @cmmnd = Command.new()
       while @cmmnd.has_next? do
@@ -68,7 +68,7 @@ class MysteryForest
   # get the user input
   def get_input
     @output.send_output "> "
-    Command.store $stdin.gets.chomp
+    Command.store @input.get_input
   end
 
   # perform an action based on a Command
@@ -96,7 +96,7 @@ class MysteryForest
       give_hint
     when "quit"
       @output.send_output "Thanks for playing!"
-      exit
+      @quit_game = true
     when /^look (.*)$/
       item = command.at(1)
       
@@ -144,9 +144,3 @@ class MysteryForest
     end
   end
 end
-
-$debug = ARGV.include?("debug")
-wrapped_screen_output = WrappedScreenOutput.new
-game = MysteryForest.new(wrapped_screen_output)
-
-game.run

@@ -2,10 +2,6 @@
 # 2013.03.09
 # scripts for all the people you interact with
 
-require_relative 'utility.rb'
-
-include Utility
-
 class Script
   def self.run name
     case name
