@@ -6,11 +6,12 @@ require_relative 'utility.rb'
 require_relative 'player.rb'
 require_relative 'point.rb'
 require_relative 'command.rb'
+require_relative 'wrapped_screen_output'
 
 include Utility
 
 class MysteryForest
-  def initialize
+  def initialize(output)
     # command to be performed
     @cmmnd = Command.new
     @triggers = {
@@ -20,14 +21,15 @@ class MysteryForest
       moved: 0,
       talked: 0
     }
+    @output = output
   end
 
   # the main game loop
   def run
     clear_screen
-    puts format_output_wrap "You are walking around a park, enjoying the sunlight speckling the trees splendent in vibrant fall colors. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the color creeps away from your surroundings. As you begin to register the lack of color, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognize where you are."
+    @output.send_output "You are walking around a park, enjoying the sunlight speckling the trees splendent in vibrant fall colors. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the color creeps away from your surroundings. As you begin to register the lack of color, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognize where you are."
     loop do
-      puts
+      @output.send_output ''
       print_room Player.current_room
 
       get_input
@@ -47,25 +49,25 @@ class MysteryForest
   # a short description
   # the items if any
   def print_room room
-    puts format_output_wrap room.description
+    @output.send_output room.description
 
     # print the people in the room
     unless room.people.empty? then
-      puts "You see: " + room.people.collect { |person| person.name }.join(", ")
+      @output.send_output "You see: " + room.people.collect { |person| person.name }.join(", ")
     end
 
     #print directions you can go
-    puts "You can go: " + room.directions.join(", ")
+    @output.send_output "You can go: " + room.directions.join(", ")
 
     # print items in the room
     unless room.items.empty? then
-      puts "You see: " + room.items.collect { |item| item.name }.join(", ")
+      @output.send_output "You see: " + room.items.collect { |item| item.name }.join(", ")
     end
   end
 
   # get the user input
   def get_input
-    print "> "
+    @output.send_output "> "
     Command.store $stdin.gets.chomp
   end
 
@@ -78,7 +80,7 @@ class MysteryForest
       item = command.at(1)
 
       if item.types.include?(:item) && item.types.include?(:room) then
-        puts "You take the #{item.to_s}."
+        @output.send_output "You take the #{item.to_s}."
         Player.take_item item.value
         Player.current_room.items.delete item.value
       end
@@ -86,20 +88,20 @@ class MysteryForest
       item = command.at(1)
 
       if item.types.include?(:item) && item.types.include?(:inventory) then
-        puts "You drop the #{item.to_s}."
+        @output.send_output "You drop the #{item.to_s}."
         Player.drop_item item.value
         Player.current_room.items.push item.value
       end
     when "hint"
       give_hint
     when "quit"
-      puts "Thanks for playing!"
+      @output.send_output "Thanks for playing!"
       exit
     when /^look (.*)$/
       item = command.at(1)
       
       if item.types.include?(:item) || item.types.include?(:person) then
-        puts format_output_wrap item.value.description
+        @output.send_output item.value.description
       end
     when /^talk (.*)$/
       person = command.at(1)
@@ -108,7 +110,7 @@ class MysteryForest
         person.value.talk
       end
     when "inventory"
-      puts "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
+    @output.send_output "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
     end
   end
 
@@ -117,7 +119,7 @@ class MysteryForest
   def perform_triggers command
     if @triggers[:trip_root] == 0 then
       if Player.location == Point.new(2, 1) then
-        puts "You trip over a root, grabbing out to a tree to keep your balance."
+        @output.send_output "You trip over a root, grabbing out to a tree to keep your balance."
         @triggers[:trip_root] += 1
       end
     end
@@ -136,15 +138,15 @@ class MysteryForest
   # give out a hint for the player
   def give_hint
     if @hints[:moved] == 0 then
-      puts "Try typing 'move north' to walk the direction north."
+      @output.send_output "Try typing 'move north' to walk the direction north."
     elsif @hints[:talked] == 0 then
-      puts "Try finding someone to talk to."
+      @output.send_output "Try finding someone to talk to."
     end
   end
 end
 
 $debug = ARGV.include?("debug")
-
-game = MysteryForest.new()
+wrapped_screen_output = WrappedScreenOutput.new
+game = MysteryForest.new(wrapped_screen_output)
 
 game.run
