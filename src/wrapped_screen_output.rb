@@ -4,7 +4,7 @@ class WrappedScreenOutput
   end
   
   def clear
-    print "\e[2J\e[24H"
+    system "clear" or system "cls"
   end
   
   private

@@ -5,6 +5,7 @@
 require_relative 'player'
 require_relative 'point'
 require_relative 'command'
+require_relative 'command_store'
 require_relative 'wrapped_screen_output'
 require_relative 'stdin_input'
 
@@ -22,6 +23,8 @@ class MysteryForest
     @output = output
     @input = input
     @quit_game = false
+    @player = Player.new
+    @command_store = CommandStore.new
   end
 
   # the main game loop
@@ -30,14 +33,14 @@ class MysteryForest
     @output.send_output "You are walking around a park, enjoying the sunlight speckling the trees resplendent in vibrant fall colours. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the colour creeps away from your surroundings. As you begin to register the lack of colour, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognise where you are."
     while !@quit_game do
       @output.send_output ''
-      print_room Player.current_room
+      print_room @player.current_room
 
       get_input
       @output.clear
 
       @cmmnd = Command.new()
-      while @cmmnd.has_next? do
-        current_command = @cmmnd.next
+      while @command_store.has_next? do
+        current_command = @cmmnd.next @command_store, @player
         perform_action current_command
         perform_triggers current_command
         update_hints current_command
@@ -68,29 +71,29 @@ class MysteryForest
   # get the user input
   def get_input
     @output.send_output "> "
-    Command.store @input.get_input
+    @command_store.store @input.get_input
   end
 
   # perform an action based on a Command
   def perform_action command
     case command.to_s
     when /^move (.*)$/
-      Player.move_by Point::DIRECTIONS[$1.to_sym]
+      @player.move_by Point::DIRECTIONS[$1.to_sym]
     when /^take (.*)$/
       item = command.at(1)
 
       if item.types.include?(:item) && item.types.include?(:room) then
         @output.send_output "You take the #{item.to_s}."
-        Player.take_item item.value
-        Player.current_room.items.delete item.value
+        @player.put_item_into_players_inventory item.value
+        @player.current_room.items.delete item.value
       end
     when /^drop (.*)$/
       item = command.at(1)
 
       if item.types.include?(:item) && item.types.include?(:inventory) then
         @output.send_output "You drop the #{item.to_s}."
-        Player.drop_item item.value
-        Player.current_room.items.push item.value
+        @player.remove_item_from_players_inventory item.value
+        @player.current_room.items.push item.value
       end
     when "hint"
       give_hint
@@ -118,7 +121,7 @@ class MysteryForest
   # by an event, such as a player moving to a new room for the first time
   def perform_triggers command
     if @triggers[:trip_root] == 0 then
-      if Player.location == Point.new(2, 1) then
+      if @player.location == Point.new(2, 1) then
         @output.send_output "You trip over a root, grabbing out to a tree to keep your balance."
         @triggers[:trip_root] += 1
       end
@@ -128,7 +131,7 @@ class MysteryForest
   # update the hints so that it can give feedback for your current
   # sitation in the game
   def update_hints command
-    if @hints[:moved] == 0 && (Player.location == Point.new(1, 0) || Player.location == Point.new(0, 1)) then
+    if @hints[:moved] == 0 && (@player.location == Point.new(1, 0) || @player.location == Point.new(0, 1)) then
       @hints[:moved] += 1
     elsif @hints[:talked] == 0 && command.to_s == "talk malich" then
       @hints[:talked] += 1

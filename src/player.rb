@@ -3,33 +3,31 @@
 # A singleton to hold the player information
 # - location
 # - inventory
-
-require_relative 'world.rb'
+require_relative 'room_list.rb'
 require_relative 'point.rb'
 
-module Player
+class Player
   attr_accessor :location, :items
 
-  extend self
-
-  @location = Point.new(0, 0)
-  @items = []
+  def initialize
+    @location = Point.new(0, 0)
+    @items = []
+    @room_list = RoomList.new
+  end
 
   def current_room
-    World.instance.room_at @location
+    @room_list.room_at @location
   end
 
-  # add a point to the current player location
   def move_by point
-    @location += point if World.instance.room_at(@location + point)
+    @location += point if @room_list.room_at(@location + point)
   end
 
-  # put an item in the player's inventory
-  def take_item item
+  def put_item_into_players_inventory item
     @items.push item
   end
 
-  def drop_item item
+  def remove_item_from_players_inventory item
     @items.delete item
   end
 end
