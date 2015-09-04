@@ -16,7 +16,7 @@ class RoomList
      create_room(1, 1, "There must be a clearing in the trees here, you can see a halo where the sun must be shining from above.")
      create_room(2, 1, "You think you can see a faint path beneath the mist.")
      create_room(3, 1, "The mist drapes over yourself and the trees, creating a heavy blanket.",[],[
-       Person.new("Malich", "An old man, face coated in a fine dust of gray facial hair. He is wearing a dull blue robe and staring at you, waiting for you to do something.")
+       Person.new("Malich", "An old man, face coated in a fine dust of gray facial hair. He is wearing a dull blue robe and staring at you, waiting for you to do something.", Script.new)
      ])
      create_room(4, 0, "You can see tall shadows surrounding you. Not trees. They feel cold and hard like stone.")
      create_room(4, 1, "You can feel the firm stone beneath your feet.")

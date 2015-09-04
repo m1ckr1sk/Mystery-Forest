@@ -49,9 +49,7 @@ class Command
 
   private
 
-  # returns a token if a word describes an inventory item
-  #   or item in the current room
-  # returns a token if found, nil if not found
+  
  
 
 end

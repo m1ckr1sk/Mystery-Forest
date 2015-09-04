@@ -7,13 +7,14 @@ require_relative 'script.rb'
 class Person
   attr_accessor :name, :description
 
-  def initialize name, description
+  def initialize name, description, script
     @name = name
     @description = description
+    @script = script
   end
 
   def talk input, output
-    Script.run(input, output, @name)
+    @script.run(input, output, @name)
   end
 
   def to_s

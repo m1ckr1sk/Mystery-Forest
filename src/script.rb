@@ -3,7 +3,7 @@
 # scripts for all the people you interact with
 
 class Script
-  def self.run input, output, name
+  def run input, output, name
     case name
     when "Malich"
       actions = {
