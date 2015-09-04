@@ -3,7 +3,7 @@
 # scripts for all the people you interact with
 
 class Script
-  def self.run name
+  def self.run input, output, name
     case name
     when "Malich"
       actions = {
@@ -19,20 +19,21 @@ class Script
       current_responses = actions[current][1].collect { |a| responses[a] }
       num_responses = current_responses.length
 
-
       begin
         response = -1
         while response < 0 || response >= num_responses do
-          puts actions[current].first
-          puts "Your response:"
+          
+          output.send_output actions[current].first
+          output.send_output "Your response:"
 
           0.upto(num_responses - 1) do |i|
-            puts "#{i + 1}. #{current_responses[i][0]}"
+            output.send_output "#{i + 1}. #{current_responses[i][0]}"
           end
-          print ": "
-          response = $stdin.gets.to_i - 1
-          clear_screen
+          output.send_output ": "
+          response = input.get_input.to_i - 1
+          output.clear
         end
+
         current = current_responses[response][1]
         current_responses = actions[current][1].collect { |a| responses[a] }
         num_responses = current_responses.length

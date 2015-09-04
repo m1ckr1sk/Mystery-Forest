@@ -12,8 +12,8 @@ class Person
     @description = description
   end
 
-  def talk
-    Script.run(@name)
+  def talk input, output
+    Script.run(input, output, @name)
   end
 
   def to_s

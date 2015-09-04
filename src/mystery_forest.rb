@@ -110,7 +110,7 @@ class MysteryForest
       person = command.at(1)
 
       if person.types.include?(:person) then
-        person.value.talk
+        person.value.talk @input, @output
       end
     when "inventory"
     @output.send_output "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")

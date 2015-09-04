@@ -80,7 +80,7 @@ class CommandStore
         still_item = check_item
         while unknown.length > 0 && still_item do
           value = unknown.pop + " " + value
-          still_item = find_item(value)
+          still_item = find_item(value,player)
           check_item = still_item if still_item
         end
 
