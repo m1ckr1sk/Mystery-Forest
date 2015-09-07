@@ -1,29 +1,25 @@
 # Mark Harder
 # 2013.03.09
 # scripts for all the people you interact with
+require_relative 'script_responses'
+require_relative 'script_actions'
+
 
 class Script
   def run input, output, name
     case name
     when "Malich"
-      actions = {
-        greet: ["'Hello,' the man smiles at you.", [:ask_purpose]],
-        purpose: ["'I am here to guide you.'", [:bye]],
-        bye: ["'I will see you later.'", []]
-      }
-      responses = {
-        ask_purpose: ["'What are you doing here?'", :purpose],
-        bye: ["'Good bye.'", :bye]
-      }
-      current = :greet
-      current_responses = actions[current][1].collect { |a| responses[a] }
+      actions = ScriptActions.new
+      responses = ScriptResponses.new
+      current_action = actions.first_action
+      current_responses = actions.current_responses current_action, responses
       num_responses = current_responses.length
 
       begin
         response = -1
         while response < 0 || response >= num_responses do
           
-          output.send_output actions[current].first
+          output.send_output(actions.action_output(current_action))
           output.send_output "Your response:"
 
           0.upto(num_responses - 1) do |i|
@@ -34,8 +30,8 @@ class Script
           output.clear
         end
 
-        current = current_responses[response][1]
-        current_responses = actions[current][1].collect { |a| responses[a] }
+        current_action = current_responses[response][1]
+        current_responses = actions.current_responses current_action, responses
         num_responses = current_responses.length
       end until num_responses == 0
     end
