@@ -113,7 +113,7 @@ class MysteryForest
         person.value.talk @input, @output
       end
     when "inventory"
-    @output.send_output "You are holding: " + Player.items.collect { |item| item.to_s }.join(", ")
+      @output.send_output "You are holding: " + @player.items.collect { |item| item.to_s }.join(", ")
     end
   end
 
