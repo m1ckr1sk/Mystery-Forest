@@ -43,7 +43,6 @@ class Command
       target.push first
     end
 
-    p target if $debug
     Command.new(target)
   end
 
