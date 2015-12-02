@@ -1,6 +1,8 @@
 # MysteryForest
 =============
 
+[![Circle CI](https://circleci.com/gh/m1ckr1sk/MysteryForest.svg?style=svg)](https://circleci.com/gh/m1ckr1sk/MysteryForest)
+
 A text adventure in ruby
 
 To run this game, using the command prompt of your choice, use the following command
