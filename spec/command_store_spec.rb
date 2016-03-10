@@ -16,7 +16,7 @@ describe 'command store' do
 
   it 'should return all tokens from a command' do
     command_store = CommandStore.new()
-    player = Player.new
+    player = create_player
     command_store.store("move")
     expect(command_store.next_token(player).to_s).to eq('move')
 
@@ -24,14 +24,14 @@ describe 'command store' do
 
   it 'should return non tokens from a command' do
     command_store = CommandStore.new()
-    player = Player.new
+    player = create_player
     command_store.store("up chicken")
     expect(command_store.next_token(player).to_s).to eq('up chicken')
   end
 
   it 'should not return synonyms from a command' do
     command_store = CommandStore.new()
-    player = Player.new
+    player = create_player
     command_store.store("pick up chicken")
     expect(command_store.next_token(player).to_s).to eq('take')
     puts command_store.next_token(player).to_s
@@ -39,10 +39,15 @@ describe 'command store' do
 
   it 'should return all tokens from a command multiple' do
     command_store = CommandStore.new()
-    player = Player.new
+    player = create_player
     command_store.store("move north")
     expect(command_store.next_token(player).to_s).to eq('move')
     expect(command_store.next_token(player).to_s).to eq('north')
 
+  end
+  
+  def create_player
+    environment = Environment.new
+    player = Player.new(environment)
   end
 end

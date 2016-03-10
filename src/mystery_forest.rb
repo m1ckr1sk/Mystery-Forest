@@ -2,6 +2,7 @@
 # 2013.01.31
 # The game engine
 
+require_relative 'environment'
 require_relative 'player'
 require_relative 'point'
 require_relative 'command'
@@ -23,14 +24,15 @@ class MysteryForest
     @output = output
     @input = input
     @quit_game = false
-    @player = Player.new
+    @environment = Environment.new
+    @player = Player.new(@environment)
     @command_store = CommandStore.new
   end
 
   # the main game loop
   def run
     @output.clear
-    @output.send_output "You are walking around a park, enjoying the sunlight speckling the trees resplendent in vibrant fall colours. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the colour creeps away from your surroundings. As you begin to register the lack of colour, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognise where you are."
+    @output.send_output @environment.greeting
     while !@quit_game do
       @output.send_output ''
       print_room @player.current_room

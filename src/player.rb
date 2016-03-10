@@ -3,20 +3,20 @@
 # A singleton to hold the player information
 # - location
 # - inventory
-require_relative 'room_list.rb'
 require_relative 'point.rb'
+require_relative 'environment'
 
 class Player
   attr_accessor :location, :items
 
-  def initialize
+  def initialize(environment)
     @location = Point.new(0, 0)
     @items = []
-    @room_list = RoomList.new
+    @environment = environment
   end
 
   def current_room
-    @room_list.room_at @location
+    @environment.room_at @location
   end
 
   def move_by point
