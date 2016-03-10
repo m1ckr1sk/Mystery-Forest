@@ -14,9 +14,11 @@ Then the welcome message must be displayed
 Scenario: starting the game at first room
 Given that I have some rooms
 | location x| location y| description	|
-| 0         | 0			|"entrance room"|
+| 0         | 0			|entrance room|
 When I issue no commands
 Then the game will respond with
 |output|
-|"entrance room"|
+|welcome|
+||
+|entrance room|
 

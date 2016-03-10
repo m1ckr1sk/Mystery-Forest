@@ -4,7 +4,6 @@ require_relative 'item.rb'
 require_relative 'person.rb'
 require_relative 'location'
 
-
 class RoomList
   def initialize (locations)
     @room_map = {}

@@ -1,11 +1,15 @@
 require 'cucumber/rspec/doubles'
 
-require_relative 'helpers/room_list_generator'
+require_relative 'helpers/location_list_generator'
 require_relative '../../src/mystery_forest'
 
 Before do
   @test_output = double("Output")
   @test_input = double("Input")
+end
+
+After do
+  
 end
 
 Given(/^that the game has started$/) do
@@ -52,22 +56,24 @@ Then(/^the welcome message must be displayed$/) do
 end
 
 Given(/^that I have some rooms$/) do |rooms_table|
-  room_list_generator = RoomListGenerator.new
-  rooms_table.hashes.each do |row|
-    puts row["location x"]
-  end
+  location_list = LocationListGenerator.generate_location_list(rooms_table.hashes)
+  @room_list = RoomList.new(location_list)
+  @environment = Environment.new(@room_list)
+  @environment.set_greeting('welcome')
+  allow(@test_output).to receive(:clear)
+  allow(@test_output).to receive(:send_output)
 end
 
 When(/^I issue no commands$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  allow(@test_input).to receive(:get_input){'quit'}
 end
 
-Then(/^the game will respond with$/) do |table|
-  # table is a Cucumber::Core::Ast::DataTable
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-def create_room(location_x, location_y, description)
-
+Then(/^the game will respond with$/) do |expectations|
+  expectations.hashes.each do |row|
+    expect(@test_output).to receive(:send_output).with(row["output"])  
+  end
+  
+  @game = MysteryForest.new(@test_input, @test_output, @environment)
+  @game.run
 end
 

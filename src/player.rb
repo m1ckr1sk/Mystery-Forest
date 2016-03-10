@@ -20,7 +20,7 @@ class Player
   end
 
   def move_by point
-    @location += point if @room_list.room_at(@location + point)
+    @location += point if @environment.room_at(@location + point)
   end
 
   def put_item_into_players_inventory item

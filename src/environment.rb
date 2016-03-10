@@ -1,4 +1,4 @@
-require_relative 'room_list.rb'
+require_relative 'room_list'
 
 class Environment
   def initialize(room_list)

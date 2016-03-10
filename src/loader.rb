@@ -22,10 +22,10 @@ locations << Location.new(Point.new(4, 1), Room.new("You can feel the firm stone
 locations << Location.new(Point.new(4, 2), Room.new("The mist has thinned, you see a hole in the ground."))
 locations << Location.new(Point.new(5, 1), Room.new("Now the mist has settled, twirling around your ankles. Even though you can see, all you see is inky black. You don't see any trees."))
 
-room_list = new RoomList.new(locations)
+room_list = RoomList.new(locations)
 environment = Environment.new(room_list)
 environment.set_greeting("You are walking around a park, enjoying the sunlight speckling the trees resplendent in vibrant fall colours. You breathe in the earthy air and take in the soft ground beneath you and the surrounding leaves. After strolling around for a while you don't even notice as the colour creeps away from your surroundings. As you begin to register the lack of colour, you see that a heavy mist has settled in, obscuring your vision. Everything is covered in a dense, white mist. You walk around, trying to find the path back to the main visitor building, but you no longer recognise where you are.")
 player = Player.new(environment)
-game = MysteryForest.new(stdin_input, wrapped_screen_output,player)
+game = MysteryForest.new(stdin_input, wrapped_screen_output,environment)
 
 game.run
