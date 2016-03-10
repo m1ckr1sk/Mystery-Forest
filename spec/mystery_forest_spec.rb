@@ -1,6 +1,10 @@
 require_relative '../src/mystery_forest'
 
 describe 'mystery forest' do
+  
+  before(:each)  do
+    @environment = Environment.new
+  end
 
   it 'should ask for input from the user' do
     test_output = double("Output")
@@ -10,8 +14,7 @@ describe 'mystery forest' do
     allow(test_output).to receive(:send_output)
     allow(test_input).to receive(:get_input) {"quit"}
     expect(test_input).to receive(:get_input)
-
-    game = MysteryForest.new(test_input, test_output)
+    game = MysteryForest.new(test_input, test_output,@environment)
     game.run
   end
 
@@ -20,12 +23,13 @@ describe 'mystery forest' do
     test_output = double("Output")
     test_input = double("Input")
 
+    @environment.set_greeting(introduction)
     allow(test_output).to receive(:clear)
     allow(test_output).to receive(:send_output)
     allow(test_input).to receive(:get_input){"quit"}
     expect(test_output).to receive(:send_output).with(introduction)
 
-    game = MysteryForest.new(test_input, test_output)
+    game = MysteryForest.new(test_input, test_output,@environment)
     game.run
   end
   
@@ -39,7 +43,7 @@ describe 'mystery forest' do
     allow(test_input).to receive(:get_input){"quit"}
     expect(test_output).to receive(:send_output).with(exit_message)
 
-    game = MysteryForest.new(test_input, test_output)
+    game = MysteryForest.new(test_input, test_output,@environment)
     game.run
   end
 

@@ -11,7 +11,7 @@ require_relative 'wrapped_screen_output'
 require_relative 'stdin_input'
 
 class MysteryForest
-  def initialize(input, output)
+  def initialize(input, output,environment)
     # command to be performed
     @cmmnd = Command.new
     @triggers = {
@@ -24,7 +24,7 @@ class MysteryForest
     @output = output
     @input = input
     @quit_game = false
-    @environment = Environment.new
+    @environment = environment
     @player = Player.new(@environment)
     @command_store = CommandStore.new
   end
