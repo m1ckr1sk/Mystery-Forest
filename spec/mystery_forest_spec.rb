@@ -3,7 +3,8 @@ require_relative '../src/mystery_forest'
 describe 'mystery forest' do
   
   before(:each)  do
-    @environment = Environment.new
+    @room_list = RoomList.new
+    @environment = Environment.new(@room_list)
   end
 
   it 'should ask for input from the user' do

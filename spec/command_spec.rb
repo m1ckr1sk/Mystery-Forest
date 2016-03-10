@@ -21,7 +21,8 @@ describe 'command' do
   
   it 'should return the next command' do
       command_store = CommandStore.new
-      environment = Environment.new
+      room_list = RoomList.new
+      environment = Environment.new(room_list)
       player = Player.new(environment)
       command = Command.new(['token1','token2'])
       puts command.next(command_store, player)

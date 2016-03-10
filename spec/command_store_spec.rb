@@ -2,11 +2,12 @@ require_relative '../src/command_store'
 require_relative '../src/player'
 
 describe 'command store' do
-  
+
   before(:each)  do
-      @environment = Environment.new
-    end
-  
+    @room_list = RoomList.new
+    @environment = Environment.new(@room_list)
+  end
+
   it 'should store a command' do
     command_store = CommandStore.new()
     command_store.store("I am a command")
@@ -50,6 +51,5 @@ describe 'command store' do
     expect(command_store.next_token(player).to_s).to eq('north')
 
   end
-  
-  
+
 end

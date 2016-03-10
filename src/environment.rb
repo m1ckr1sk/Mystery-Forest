@@ -1,8 +1,8 @@
 require_relative 'room_list.rb'
 
 class Environment
-  def initialize
-    @room_list = RoomList.new
+  def initialize(room_list)
+    @room_list = room_list
     @greeting = ''
   end
 

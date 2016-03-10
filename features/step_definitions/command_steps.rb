@@ -9,7 +9,8 @@ end
 
 Given(/^that the game has started$/) do
   exit_message = "Thanks for playing!"
-  @environment = Environment.new
+  @room_list = RoomList.new
+  @environment = Environment.new(@room_list)
   @environment.set_greeting('greeting')
   allow(@test_output).to receive(:clear)
   allow(@test_output).to receive(:send_output)
@@ -25,7 +26,8 @@ Then(/^the game will respond with a message "([^"]*)"$/) do |expected_message|
 end
 
 Given(/^that I have a game setup with a greeting "([^"]*)"$/) do |greeting|
-  @environment = Environment.new
+  @room_list = RoomList.new
+  @environment = Environment.new(@room_list)
   @greeting_message = greeting
   @environment.set_greeting(@greeting_message)
   allow(@test_output).to receive(:clear)
@@ -44,7 +46,7 @@ end
 
 Given(/^that I have some rooms$/) do |rooms_table|
   rooms_table.hashes.each do |row|
-    puts row["location x"] 
+    puts row["location x"]
   end
 end
 
@@ -58,6 +60,6 @@ Then(/^the game will respond with$/) do |table|
 end
 
 def create_room(location_x, location_y, description)
-  
+
 end
 
