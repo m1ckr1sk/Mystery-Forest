@@ -1,5 +1,5 @@
 require 'cucumber/rspec/doubles'
-
+require_relative 'helpers/room_list_generator'
 require_relative '../../src/mystery_forest'
 
 Before do
@@ -45,6 +45,7 @@ Then(/^the welcome message must be displayed$/) do
 end
 
 Given(/^that I have some rooms$/) do |rooms_table|
+  room_list_generator = RoomListGenerator.new
   rooms_table.hashes.each do |row|
     puts row["location x"]
   end
