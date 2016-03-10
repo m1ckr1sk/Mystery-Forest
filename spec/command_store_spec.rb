@@ -4,7 +4,10 @@ require_relative '../src/player'
 describe 'command store' do
 
   before(:each)  do
-    @room_list = RoomList.new
+    locations = []
+    locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
+
+    @room_list = RoomList.new(locations)
     @environment = Environment.new(@room_list)
   end
 

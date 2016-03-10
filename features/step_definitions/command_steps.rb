@@ -1,4 +1,5 @@
 require 'cucumber/rspec/doubles'
+
 require_relative 'helpers/room_list_generator'
 require_relative '../../src/mystery_forest'
 
@@ -9,7 +10,10 @@ end
 
 Given(/^that the game has started$/) do
   exit_message = "Thanks for playing!"
-  @room_list = RoomList.new
+  locations = []
+  locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
+
+  @room_list = RoomList.new(locations)
   @environment = Environment.new(@room_list)
   @environment.set_greeting('greeting')
   allow(@test_output).to receive(:clear)
@@ -26,7 +30,10 @@ Then(/^the game will respond with a message "([^"]*)"$/) do |expected_message|
 end
 
 Given(/^that I have a game setup with a greeting "([^"]*)"$/) do |greeting|
-  @room_list = RoomList.new
+  locations = []
+  locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
+
+  @room_list = RoomList.new(locations)
   @environment = Environment.new(@room_list)
   @greeting_message = greeting
   @environment.set_greeting(@greeting_message)

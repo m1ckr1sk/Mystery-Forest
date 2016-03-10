@@ -18,13 +18,16 @@ describe 'command' do
     expect(command.at(1)).to eq("token2")
     expect(command.at(0)).to eq("token1")
   end
-  
+
   it 'should return the next command' do
-      command_store = CommandStore.new
-      room_list = RoomList.new
-      environment = Environment.new(room_list)
-      player = Player.new(environment)
-      command = Command.new(['token1','token2'])
-      puts command.next(command_store, player)
-    end
+    command_store = CommandStore.new
+    locations = []
+    locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
+
+    room_list = RoomList.new(locations)
+    environment = Environment.new(room_list)
+    player = Player.new(environment)
+    command = Command.new(['token1','token2'])
+    puts command.next(command_store, player)
+  end
 end

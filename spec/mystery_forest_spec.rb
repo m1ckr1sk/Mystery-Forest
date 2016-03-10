@@ -1,9 +1,12 @@
 require_relative '../src/mystery_forest'
 
 describe 'mystery forest' do
-  
+
   before(:each)  do
-    @room_list = RoomList.new
+    locations = []
+    locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
+
+    @room_list = RoomList.new(locations)
     @environment = Environment.new(@room_list)
   end
 
@@ -33,7 +36,7 @@ describe 'mystery forest' do
     game = MysteryForest.new(test_input, test_output,@environment)
     game.run
   end
-  
+
   it 'should output exit message on quit' do
     exit_message = "Thanks for playing!"
     test_output = double("Output")
