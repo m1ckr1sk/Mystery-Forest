@@ -17,8 +17,8 @@ Then the game will respond with
 
 Scenario: Entering a room should describe the room
 Given that I have some rooms
-| location x| location y| description	|
-| 0         | 0			|entrance room|
+|id| location x| location y| description	|
+|1 | 0         | 0			|entrance room|
 When I issue no commands
 Then the game will respond with
 |output|
@@ -28,9 +28,9 @@ Then the game will respond with
 
 Scenario: Moving to a new room should describe new room
 Given that I have some rooms
-| location x| location y| description	|
-| 0         | 0			|entrance room|
-| 0         | 1			|north room|
+|id| location x| location y| description	|
+|1 | 0         | 0			|entrance room|
+|2 | 0         | 1			|north room|
 When I issue the commands
 |command|
 |north|
@@ -52,9 +52,9 @@ Then the game will respond with exactly
 
 Scenario: Moving to a new room using abbreviation should move to new room
 Given that I have some rooms
-| location x| location y| description	|
-| 0         | 0			|entrance room|
-| 0         | 1			|north room|
+|id| location x| location y| description	|
+|1 | 0         | 0			|entrance room|
+|2 | 0         | 1			|north room|
 When I issue the commands
 |command|
 |n|
@@ -76,9 +76,9 @@ Then the game will respond with exactly
 
 Scenario: Moving to a new room that doesn't exist should re show valid directions
 Given that I have some rooms
-| location x| location y| description	|
-| 0         | 0			|entrance room|
-| 0         | 1			|north room|
+|id| location x| location y| description	|
+|1 | 0         | 0			|entrance room|
+|2 | 0         | 1			|north room|
 When I issue the commands
 |command|
 |south|
@@ -97,4 +97,30 @@ Then the game will respond with exactly
 | '> ' |
 |clear|
 |Thanks for playing!|
+
+Scenario: Invalid commands should re show valid directions
+Given that I have some rooms
+|id| location x| location y| description	|
+|1 | 0         | 0			|entrance room|
+|2 | 0         | 1			|north room|
+When I issue the commands
+|command|
+|I am not a command you will know about|
+Then the game will respond with exactly
+|output|
+|clear|
+|welcome|
+||
+|entrance room|
+|You can go: north|
+| '> ' |
+|clear|
+||
+|entrance room|
+|You can go: north|
+| '> ' |
+|clear|
+|Thanks for playing!|
+
+
 

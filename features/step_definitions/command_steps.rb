@@ -9,43 +9,33 @@ Before do
 end
 
 Given(/^that I have a game setup with a greeting "([^"]*)"$/) do |greeting|
-  locations = []
-  locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
-
-  @room_list = RoomList.new(locations)
-  @environment = Environment.new(@room_list)
-  @greeting_message = greeting
-  @environment.set_greeting(@greeting_message)
+  @locations_hash = create_single_room
+  @greeting = greeting
 end
 
 Given(/^that the game has started$/) do
-  exit_message = "Thanks for playing!"
-  locations = []
-  locations << Location.new(Point.new(0, 0), Room.new("You are in the first room 0,0",[],[]))
-
-  @room_list = RoomList.new(locations)
-  @environment = Environment.new(@room_list)
-  @environment.set_greeting('greeting')
+  @locations_hash = create_single_room
+  @greeting = 'welcome'
 end
 
 Given(/^that I have some rooms$/) do |rooms_table|
-  location_list = LocationListGenerator.generate_location_list(rooms_table.hashes)
-  @room_list = RoomList.new(location_list)
-  @environment = Environment.new(@room_list)
-  @environment.set_greeting('welcome')
+  @locations_hash = rooms_table.hashes
+  @greeting = 'welcome'
+end
+
+Given(/^I have some items in the rooms$/) do |items_table|
+  add_items_to_locations(items_table.hashes)
 end
 
 When(/^I issue no commands$/) do
-  @test_input = CommandInjector.new([])
-  @game = MysteryForest.new(@test_input, @test_output, @environment)
+  @game = MysteryForest.new(CommandInjector.new([]), @test_output, create_environment)
   @game.run
 end
 
 When(/^I issue a command "([^"]*)"$/) do |command|
   commands = []
   commands << command
-  @test_input = CommandInjector.new(commands)
-  @game = MysteryForest.new(@test_input, @test_output,@environment)
+  @game = MysteryForest.new(CommandInjector.new(commands), @test_output, create_environment)
   @game.run
 end
 
@@ -54,8 +44,7 @@ When(/^I issue the commands$/) do |commands_list|
   commands_list.hashes.each do |command|
     commands << command["command"]
   end
-  @test_input = CommandInjector.new(commands)
-  @game = MysteryForest.new(@test_input, @test_output,@environment)
+  @game = MysteryForest.new(CommandInjector.new(commands), @test_output, create_environment)
   @game.run
 end
 
@@ -71,4 +60,27 @@ Then(/^the game will respond with exactly$/) do |expectations|
     expected_commands << row["output"].gsub("'", "")
   end
   expect(@test_output.output_logged).to match_array(expected_commands)
+end
+
+def create_environment
+  room_list = RoomList.new(LocationListGenerator.generate_location_list(@locations_hash))
+  environment = Environment.new(room_list)
+  environment.set_greeting(@greeting)
+  return environment
+end
+
+def create_single_room
+  return [{'id' => '1', 'location x' => '0','location y' => '0','description' => 'You are in the first room 0,0'}]
+end
+
+def add_items_to_locations(items_hash)
+  items_hash.each do |item_row|
+    if room = @locations_hash.find { |k,v| k.to_s[item_row['room']] }
+      if room['items'].nil?
+        room['items'] = [item_row]
+      else
+        room['items'] << item_row
+      end
+    end
+  end
 end
