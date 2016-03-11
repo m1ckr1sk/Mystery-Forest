@@ -74,3 +74,27 @@ Then the game will respond with exactly
 |clear|
 |Thanks for playing!|
 
+Scenario: Moving to a new room that doesn't exist should re show valid directions
+Given that I have some rooms
+| location x| location y| description	|
+| 0         | 0			|entrance room|
+| 0         | 1			|north room|
+When I issue the commands
+|command|
+|south|
+Then the game will respond with exactly
+|output|
+|clear|
+|welcome|
+||
+|entrance room|
+|You can go: north|
+| '> ' |
+|clear|
+||
+|entrance room|
+|You can go: north|
+| '> ' |
+|clear|
+|Thanks for playing!|
+
