@@ -22,3 +22,20 @@ Then the game will respond with
 ||
 |entrance room|
 
+Scenario: starting the game at first room
+Given that I have some rooms
+| location x| location y| description	|
+| 0         | 0			|entrance room|
+| 0         | 1			|north room|
+When I issue the commands
+|command|
+|north|
+Then the game will respond with
+|output|
+|welcome|
+||
+|entrance room|
+|You can go: north|
+| '> ' |
+|north room|
+

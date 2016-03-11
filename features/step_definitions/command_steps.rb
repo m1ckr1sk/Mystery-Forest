@@ -70,10 +70,19 @@ end
 
 Then(/^the game will respond with$/) do |expectations|
   expectations.hashes.each do |row|
-    expect(@test_output).to receive(:send_output).with(row["output"])  
+    puts "EXPECTING"
+    puts row["output"].gsub("'", "")
+    expect(@test_output).to receive(:send_output).with(row["output"].gsub("'", ""))  
   end
   
   @game = MysteryForest.new(@test_input, @test_output, @environment)
   @game.run
 end
 
+When(/^I issue the commands$/) do |commands_list|
+  commands_list.hashes.each do |command|
+    allow(@test_input).to receive(:get_input).and_return(command["command"],'quit')
+  end
+  
+  #allow(@test_input).to receive(:get_input).and_return("quit")
+end
