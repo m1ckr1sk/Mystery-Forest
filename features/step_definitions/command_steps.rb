@@ -1,11 +1,11 @@
 require 'cucumber/rspec/doubles'
 
 require_relative 'helpers/location_list_generator'
+require_relative 'helpers/command_injector'
 require_relative '../../src/mystery_forest'
 
 Before do
   @test_output = double("Output")
-  @test_input = double("Input")
 end
 
 After do
@@ -25,7 +25,9 @@ Given(/^that the game has started$/) do
 end
 
 When(/^I issue a command "([^"]*)"$/) do |command|
-  allow(@test_input).to receive(:get_input){command}
+  commands = []
+  commands << command
+  @test_input = CommandInjector.new(commands)
 end
 
 Then(/^the game will respond with a message "([^"]*)"$/) do |expected_message|
@@ -65,13 +67,11 @@ Given(/^that I have some rooms$/) do |rooms_table|
 end
 
 When(/^I issue no commands$/) do
-  allow(@test_input).to receive(:get_input){'quit'}
+  @test_input = CommandInjector.new([])
 end
 
 Then(/^the game will respond with$/) do |expectations|
   expectations.hashes.each do |row|
-    puts "EXPECTING"
-    puts row["output"].gsub("'", "")
     expect(@test_output).to receive(:send_output).with(row["output"].gsub("'", ""))  
   end
   
@@ -80,9 +80,10 @@ Then(/^the game will respond with$/) do |expectations|
 end
 
 When(/^I issue the commands$/) do |commands_list|
+  commands = []
   commands_list.hashes.each do |command|
-    allow(@test_input).to receive(:get_input).and_return(command["command"],'quit')
+    commands << command["command"]
   end
+  @test_input = CommandInjector.new(commands)
   
-  #allow(@test_input).to receive(:get_input).and_return("quit")
 end
