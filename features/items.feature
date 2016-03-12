@@ -46,6 +46,68 @@ Then the game will respond with exactly
 |clear						|
 |Thanks for playing!		|
 
+Scenario: Should describe items in room when an item is looked at
+Given that I have some rooms
+|id| location x | location y | description	 |
+|1 | 0          | 0			 | entrance room |
+|2 | 0          | 1			 | north room    |
+And I have some items in the rooms
+| room | name       | description       | possibles      |
+|	1  | chicken    | Its eating corn   | chick,bird     |
+|	1  | potato     | Ripe for chipping | spud,pot       |
+When I issue the commands
+|command		    |
+|look at potato		|
+Then the game will respond with exactly
+|output						|
+|clear						|
+|welcome					|
+|							|
+|entrance room				|
+|You can go: north 			|	 
+|You see: chicken, potato	|
+|'> ' 						|
+| clear 				    |
+| Ripe for chipping         |
+|                           |
+| entrance room             |
+| You can go: north         |
+| You see: chicken, potato  |
+| '> '                      |
+|clear						|
+|Thanks for playing!		|
+
+Scenario: Should describe items in room when an item is looked at another possible name
+Given that I have some rooms
+|id| location x | location y | description	 |
+|1 | 0          | 0			 | entrance room |
+|2 | 0          | 1			 | north room    |
+And I have some items in the rooms
+| room | name       | description       | possibles      |
+|	1  | chicken    | Its eating corn   | chick,bird     |
+|	1  | potato     | Ripe for chipping | spud,pot       |
+When I issue the commands
+|command		    |
+|look at spud		|
+Then the game will respond with exactly
+|output						|
+|clear						|
+|welcome					|
+|							|
+|entrance room				|
+|You can go: north 			|	 
+|You see: chicken, potato	|
+|'> ' 						|
+| clear 				    |
+| Ripe for chipping         |
+|                           |
+| entrance room             |
+| You can go: north         |
+| You see: chicken, potato  |
+| '> '                      |
+|clear						|
+|Thanks for playing!		|
+
 Scenario: Should allow players to add items in the room to inventory
 Given that I have some rooms
 |id| location x | location y | description	 |
@@ -83,3 +145,57 @@ Then the game will respond with exactly
 | '> '                   |
 |clear					 |
 |Thanks for playing!     |
+
+Scenario: Should allow players to drop items into the room from inventory
+Given that I have some rooms
+|id| location x | location y | description	 |
+|1 | 0          | 0			 | entrance room |
+And I have some items in the rooms
+| room | name       | description       | possibles      |
+|	1  | chicken    | Its eating corn   | chick,bird     |
+|	1  | potato     | Ripe for chipping | spud,pot       |
+When I issue the commands
+|command		    |
+|Take potato		|
+|Inventory	    	|
+| Drop potato		|
+|Inventory			|
+Then the game will respond with exactly
+|output                    |
+| clear                    |
+| welcome                  |
+|                          |
+| entrance room            |
+| 'You can go: '           |
+| You see: chicken, potato |
+| '> '                     |
+| clear 		           |
+| You take the potato.     |
+|                          |
+| entrance room            |
+| 'You can go: '           |
+| You see: chicken         |
+| '> '                     |
+| clear                    |
+| You are holding: potato  |
+|                          |
+| entrance room            |
+| 'You can go: '           |
+| You see: chicken         |
+| '> '                     |
+| clear                    |
+| You drop the potato.     |
+|                          |
+| entrance room            |
+| 'You can go: '           |
+| You see: chicken, potato |
+| '> '                     |  
+| clear                    |
+| 'You are holding: '      |
+|                          |
+| entrance room            |
+| 'You can go: '           |
+| You see: chicken, potato |
+| '> '                     |
+| clear                    |
+| Thanks for playing!      |

@@ -4,7 +4,7 @@ class OutputLogger
   end
 
   def send_output(output)
-    STDOUT.puts("TEST HAS RECIEVED:#{output}")
+    STDOUT.puts("| #{output} |")
     @logged_output << output
   end
 
