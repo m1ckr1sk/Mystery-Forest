@@ -27,6 +27,10 @@ Given(/^I have some items in the rooms$/) do |items_table|
   add_items_to_locations(items_table.hashes)
 end
 
+Given(/^I have some people in the rooms$/) do |people_table|
+  add_people_to_locations(people_table.hashes)
+end
+
 When(/^I issue no commands$/) do
   @game = MysteryForest.new(CommandInjector.new([]), @test_output, create_environment)
   @game.run
@@ -80,6 +84,18 @@ def add_items_to_locations(items_hash)
         room['items'] = [item_row]
       else
         room['items'] << item_row
+      end
+    end
+  end
+end
+
+def add_people_to_locations(people_hash)
+  people_hash.each do |people_row|
+    if room = @locations_hash.find { |k,v| k.to_s[people_row['room']] }
+      if room['people'].nil?
+        room['people'] = [people_row]
+      else
+        room['people'] << people_row
       end
     end
   end

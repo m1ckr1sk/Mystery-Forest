@@ -8,7 +8,13 @@ class LocationListGenerator
           items_for_room << Item.new(item_to_add['name'],item_to_add['possibles'].split(','),item_to_add['description'])
         end
       end
-      locations << Location.new(Point.new(row["location x"].to_i,row["location y"].to_i),Room.new(row["description"],items_for_room,[]))
+      people_for_room = []
+      if !row['people'].nil?
+        row['people'].each do |person_to_add|
+          people_for_room << Person.new(person_to_add['name'],person_to_add['description'],nil)
+        end
+      end
+      locations << Location.new(Point.new(row["location x"].to_i,row["location y"].to_i),Room.new(row["description"],items_for_room,people_for_room))
     end
     return locations
   end
