@@ -32,43 +32,23 @@ class MysteryForest
     @output.send_output @environment.greeting
     while !@quit_game do
       @output.send_output ''
-      print_room @player.current_room
+      @player.current_room.print_room(@output)
 
-      get_input
+      store_input_in_command_store
       @output.clear
 
       @cmmnd = Command.new()
       while @command_store.has_next? do
         current_command = @cmmnd.next @command_store, @player
         perform_action current_command
-        perform_triggers current_command
+        perform_triggers
         update_hints current_command
       end
     end
   end
 
-  # print the room information
-  # a short description
-  # the items if any
-  def print_room room
-    @output.send_output room.description
-
-    # print the people in the room
-    unless room.people.empty? then
-      @output.send_output "You see: " + room.people.collect { |person| person.name }.join(", ")
-    end
-
-    #print directions you can go
-    @output.send_output "You can go: " + room.directions.join(", ")
-
-    # print items in the room
-    unless room.items.empty? then
-      @output.send_output "You see: " + room.items.collect { |item| item.name }.join(", ")
-    end
-  end
-
   # get the user input
-  def get_input
+  def store_input_in_command_store
     @output.send_output "> "
     @command_store.store @input.get_input
   end
@@ -79,39 +59,48 @@ class MysteryForest
     when /^move (.*)$/
       @player.move_by Point::DIRECTIONS[$1.to_sym]
     when /^take (.*)$/
-      item = command.at(1)
-      if item.types.include?(:item) && item.types.include?(:room) then
-        @output.send_output "You take the #{item.to_s}."
-        @player.put_item_into_players_inventory item.value
-        @player.current_room.items.delete item.value
-      end
+      take_action command.at(1)
     when /^drop (.*)$/
-      item = command.at(1)
-
-      if item.types.include?(:item) && item.types.include?(:inventory) then
-        @output.send_output "You drop the #{item.to_s}."
-        @player.remove_item_from_players_inventory item.value
-        @player.current_room.items.push item.value
-      end
+      drop_action command.at(1)
     when "hint"
       give_hint
+    when /^look (.*)$/
+      look_action command.at(1)
+    when /^talk (.*)$/
+      talk_person command.at(1)
+    when "inventory"
+      @output.send_output "You are holding: " + @player.items.collect { |item| item.to_s }.join(", ")
     when "quit"
       @output.send_output "Thanks for playing!"
       @quit_game = true
-    when /^look (.*)$/
-      item = command.at(1)
+    end
+  end
 
-      if item.types.include?(:item) || item.types.include?(:person) then
-        @output.send_output item.value.description
-      end
-    when /^talk (.*)$/
-      person = command.at(1)
+  def take_action item
+    if item.types.include?(:item) && item.types.include?(:room) then
+      @output.send_output "You take the #{item.to_s}."
+      @player.put_item_into_players_inventory item.value
+      @player.current_room.items.delete item.value
+    end
+  end
 
-      if person.types.include?(:person) then
-        person.value.talk @input, @output
-      end
-    when "inventory"
-      @output.send_output "You are holding: " + @player.items.collect { |item| item.to_s }.join(", ")
+  def drop_action item
+    if item.types.include?(:item) && item.types.include?(:inventory) then
+      @output.send_output "You drop the #{item.to_s}."
+      @player.remove_item_from_players_inventory item.value
+      @player.current_room.items.push item.value
+    end
+  end
+
+  def look_action item
+    if item.types.include?(:item) || item.types.include?(:person) then
+      @output.send_output item.value.description
+    end
+  end
+
+  def talk_action person
+    if person.types.include?(:person) then
+      person.value.talk @input, @output
     end
   end
 
@@ -121,9 +110,9 @@ class MysteryForest
     trigger_outcome = @triggers.check_triggers(@player)
     @output.send_output trigger_outcome if trigger_outcome != ''
   end
-  
+
   def update_hints command
-     @hint_giver.update_hints(@player,command)
+    @hint_giver.update_hints(@player,command)
   end
 
   # give out a hint for the player

@@ -46,9 +46,4 @@ class Command
     Command.new(target)
   end
 
-  private
-
-  
- 
-
 end
