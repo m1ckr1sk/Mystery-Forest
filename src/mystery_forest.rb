@@ -7,6 +7,8 @@ require_relative 'player'
 require_relative 'point'
 require_relative 'command'
 require_relative 'command_store'
+require_relative 'hint_giver'
+require_relative 'triggers'
 require_relative 'wrapped_screen_output'
 require_relative 'stdin_input'
 
@@ -14,13 +16,8 @@ class MysteryForest
   def initialize(input, output,environment)
     # command to be performed
     @cmmnd = Command.new
-    @triggers = {
-      trip_root: 0
-    }
-    @hints = {
-      moved: 0,
-      talked: 0
-    }
+    @triggers = Triggers.new
+    @hint_giver = HintGiver.new
     @output = output
     @input = input
     @quit_game = false
@@ -83,8 +80,6 @@ class MysteryForest
       @player.move_by Point::DIRECTIONS[$1.to_sym]
     when /^take (.*)$/
       item = command.at(1)
-      STDOUT.puts("GAME IS TAKING AN ITEM:#{item}")
-      STDOUT.puts("   :#{item.types}")
       if item.types.include?(:item) && item.types.include?(:room) then
         @output.send_output "You take the #{item.to_s}."
         @player.put_item_into_players_inventory item.value
@@ -105,7 +100,7 @@ class MysteryForest
       @quit_game = true
     when /^look (.*)$/
       item = command.at(1)
-      
+
       if item.types.include?(:item) || item.types.include?(:person) then
         @output.send_output item.value.description
       end
@@ -122,31 +117,17 @@ class MysteryForest
 
   # triggers are things that happen when a certain action is triggered
   # by an event, such as a player moving to a new room for the first time
-  def perform_triggers command
-    if @triggers[:trip_root] == 0 then
-      if @player.location == Point.new(2, 1) then
-        @output.send_output "You trip over a root, grabbing out to a tree to keep your balance."
-        @triggers[:trip_root] += 1
-      end
-    end
+  def perform_triggers
+    trigger_outcome = @triggers.check_triggers(@player)
+    @output.send_output trigger_outcome if trigger_outcome != ''
   end
-
-  # update the hints so that it can give feedback for your current
-  # sitation in the game
+  
   def update_hints command
-    if @hints[:moved] == 0 && (@player.location == Point.new(1, 0) || @player.location == Point.new(0, 1)) then
-      @hints[:moved] += 1
-    elsif @hints[:talked] == 0 && command.to_s == "talk malich" then
-      @hints[:talked] += 1
-    end
+     @hint_giver.update_hints(@player,command)
   end
 
   # give out a hint for the player
   def give_hint
-    if @hints[:moved] == 0 then
-      @output.send_output "Try typing 'move north' to walk the direction north."
-    elsif @hints[:talked] == 0 then
-      @output.send_output "Try finding someone to talk to."
-    end
+    @output.send_output @hint_giver.give_hint
   end
 end
