@@ -71,7 +71,6 @@ class CommandStore
 
       # check if it is an item
       check_item = find_item(value, player)
-      
 
       # if it is an item and there were unknown words before the item
       # try to see if adding the unknown words still identifies an item

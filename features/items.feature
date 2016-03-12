@@ -108,6 +108,37 @@ Then the game will respond with exactly
 |clear						|
 |Thanks for playing!		|
 
+Scenario: Should describe multiple word named items in room when an item is looked at
+Given that I have some rooms
+|id| location x | location y | description	 |
+|1 | 0          | 0			 | entrance room |
+|2 | 0          | 1			 | north room    |
+And I have some items in the rooms
+| room | name       | description              | possibles            |
+|	1  | hungry chicken    | Its eating corn   | chick,bird     	  |
+|	1  | big potato        | Ripe for chipping | spud,pot,potato      |
+When I issue the commands
+|command		        |
+|look at big potato		|
+Then the game will respond with exactly
+|output						|
+|clear						|
+|welcome					|
+|							|
+|entrance room				|
+|You can go: north 			|	 
+|You see: hungry chicken, big potato	|
+|'> ' 						|
+| clear 				    |
+| Ripe for chipping         |
+|                           |
+| entrance room             |
+| You can go: north         |
+| You see: hungry chicken, big potato  |
+| '> '                      |
+|clear						|
+|Thanks for playing!		|
+
 Scenario: Should allow players to add items in the room to inventory
 Given that I have some rooms
 |id| location x | location y | description	 |
