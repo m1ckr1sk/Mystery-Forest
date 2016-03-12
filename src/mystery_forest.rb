@@ -83,7 +83,8 @@ class MysteryForest
       @player.move_by Point::DIRECTIONS[$1.to_sym]
     when /^take (.*)$/
       item = command.at(1)
-
+      STDOUT.puts("GAME IS TAKING AN ITEM:#{item}")
+      STDOUT.puts("   :#{item.types}")
       if item.types.include?(:item) && item.types.include?(:room) then
         @output.send_output "You take the #{item.to_s}."
         @player.put_item_into_players_inventory item.value

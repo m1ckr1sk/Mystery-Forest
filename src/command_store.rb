@@ -71,10 +71,11 @@ class CommandStore
 
       # check if it is an item
       check_item = find_item(value, player)
+      
 
       # if it is an item and there were unknown words before the item
       # try to see if adding the unknown words still identifies an item
-      # For example if 'dagger' matches an item, and 'iron' was unkown
+      # For example if 'dagger' matches an item, and 'iron' was unknown
       # check that 'iron dagger' identifies an item
       if check_item then
         still_item = check_item
@@ -117,7 +118,7 @@ class CommandStore
         unknown.push(word)
 
         if @words.empty? then
-          token = Token.new(unknown.join(" "), [:unknwon])
+          token = Token.new(unknown.join(" "), [:unknown])
         end
       else
         token = Token.new(value, types)

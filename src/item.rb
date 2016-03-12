@@ -9,7 +9,7 @@ class Item
 
   def initialize name, possible_names, description
     @name = name
-    @possible_names = possible_names
+    @possible_names = possible_names << name
     @description = description
   end
 
