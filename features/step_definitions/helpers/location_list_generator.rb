@@ -1,6 +1,8 @@
+require 'json'
+
 class LocationListGenerator
   def self.generate_location_list(rooms_hash)
-    STDOUT.puts("ROOMS HASH:#{rooms_hash}")
+    STDOUT.puts(rooms_hash.to_json)
     locations = []
     rooms_hash.each do |row|
       items_for_room = []
@@ -18,13 +20,11 @@ class LocationListGenerator
             person_to_add['script_actions'].each do |script_actions|
               response = if script_actions['response'] == '' then [] else [script_actions['response'].to_sym] end
               person_script_actions[script_actions['action'].to_sym] = [script_actions['text'],response]
-              STDOUT.puts("ADDING ACTIONS CONVERTED:#{person_script_actions}")
             end
           end
           if person_to_add.include?'script_responses'
             person_to_add['script_responses'].each do |script_responses|
               person_script_responses[script_responses['response'].to_sym] = [script_responses['text'],script_responses['next actions'].to_sym]
-              STDOUT.puts("ADDING RESPONSES CONVERTED:#{person_script_responses}")
             end
           end
           person_script = Script.new( ScriptActions.new(person_script_actions),ScriptResponses.new(person_script_responses))

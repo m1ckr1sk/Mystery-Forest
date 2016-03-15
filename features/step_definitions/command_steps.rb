@@ -20,7 +20,10 @@ end
 
 Given(/^that I have some rooms$/) do |rooms_table|
   @locations_hash = rooms_table.hashes
-  @greeting = 'welcome'
+end
+
+Given(/^that I have a welcome message "([^"]*)"$/) do |greeting|
+  @greeting = greeting
 end
 
 Given(/^I have some items in the rooms$/) do |items_table|
@@ -54,14 +57,20 @@ end
 
 Then(/^the game will respond with$/) do |expectations|
   expectations.hashes.each do |row|
-    expect(@test_output.output_logged).to include(row["output"].gsub("'", ""))
+    expected_text = row["output"].chop.reverse.chop.reverse
+    STDOUT.puts("EXPECTED:#{expected_text}")
+    expect(@test_output.output_logged).to include(expected_text)
   end
 end
 
 Then(/^the game will respond with exactly$/) do |expectations|
   expected_commands = []
   expectations.hashes.each do |row|
-    expected_commands << row["output"].gsub("'", "")
+    
+  if row["output"][0] == "'" then expected_text = row["output"].reverse.chop.reverse else expected_text = row["output"] end
+  if expected_text[-1] == "'" then expected_text = expected_text.chop end
+    STDOUT.puts("EXPECTED:#{expected_text}")
+    expected_commands << expected_text
   end
   expect(@test_output.output_logged).to match_array(expected_commands)
 end
@@ -141,13 +150,13 @@ end
 
 def add_script_responses_to_person(scripts_response_hash)
   scripts_response_hash.each do |script_response_row|
-      person = find_person(script_response_row['person'])
-      if !person.nil?
-        if person['script_responses'].nil?
-          person['script_responses'] = [script_response_row]
-        else
-          person['script_responses'] << script_response_row
-        end
+    person = find_person(script_response_row['person'])
+    if !person.nil?
+      if person['script_responses'].nil?
+        person['script_responses'] = [script_response_row]
+      else
+        person['script_responses'] << script_response_row
       end
     end
+  end
 end

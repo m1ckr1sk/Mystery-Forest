@@ -72,23 +72,23 @@ When I issue the commands
 |1					|
 Then the game will respond with exactly
 |output						|
-| clear |
-| welcome |
-| '' |
-| entrance room |
-| You see: george |
-| You can go: north |
-| '> ' |
-| clear |
-| Hi |
-| Your response: |
-| 1. Hello there |
-| ': ' |
-| clear |
-| ''  |
-| entrance room |
-| You see: george |
-| You can go: north |
-| '> ' |
-| clear |
-| Thanks for playing! |
+| clear                     |
+| welcome                   |
+| ''                        |
+| entrance room             |
+| You see: george           |
+| You can go: north         |
+| '> '                      |
+| clear                     |
+| Hi                        |
+| Your response:            |
+| 1. Hello there            |
+| ': '                      |
+| clear                     |
+| ''                        |
+| entrance room             |
+| You see: george           |
+| You can go: north         |
+| '> '                      |
+| clear                     |
+| Thanks for playing!       |
