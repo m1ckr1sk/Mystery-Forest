@@ -68,22 +68,27 @@ And I have some script responses
 | 1      | greet_response   | Hello there   | bye				|
 When I issue the commands
 |command		    |
-|look at george		|
+|talk to george		|
+|1					|
 Then the game will respond with exactly
 |output						|
-|clear						|
-|welcome					|
-|							|
-|entrance room				|
-|You can go: north 			|	 
-|You see: george         	|
-|'> ' 						|
-| clear                     |
-| An old man with a crooked nose |
-|                           |
-| entrance room             |
-| You see: george           |
-| You can go: north         |
-| '> '                      |
-|clear						|
-|Thanks for playing!		|
+| clear |
+| welcome |
+| '' |
+| entrance room |
+| You see: george |
+| You can go: north |
+| '> ' |
+| clear |
+| Hi |
+| Your response: |
+| 1. Hello there |
+| ': ' |
+| clear |
+| ''  |
+| entrance room |
+| You see: george |
+| You can go: north |
+| '> ' |
+| clear |
+| Thanks for playing! |

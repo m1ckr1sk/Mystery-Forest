@@ -111,7 +111,8 @@ end
 
 def add_script_actions_to_person(scripts_action_hash)
   scripts_action_hash.each do |script_action_row|
-    if person = @locations_hash.find { |k,v| k.to_s[script_action_row['person']] }
+    person = find_person(script_action_row['person'])
+    if !person.nil?
       if person['script_actions'].nil?
         person['script_actions'] = [script_action_row]
       else
@@ -121,14 +122,32 @@ def add_script_actions_to_person(scripts_action_hash)
   end
 end
 
-def add_script_responses_to_person(scripts_response_hash)
-  scripts_response_hash.each do |script_response_row|
-    if person = @locations_hash.find { |k,v| k.to_s[script_response_row['person']] }
-      if person['script_responses'].nil?
-        person['script_responses'] = [script_response_row]
-      else
-        person['script_responses'] << script_response_row
+def find_person(person_id)
+  person_found = nil
+  @locations_hash.each do |location|
+    STDOUT.puts "LOCATION:#{location}"
+    if location.include?('people')
+      location['people'].each do | person|
+        STDOUT.puts "FINDING PERSON:#{person['person']} with #{person_id}"
+        if person['person'] == person_id
+          STDOUT.puts "FOUND PERSON:#{person}"
+          person_found = person
+        end
       end
     end
   end
+  return person_found
+end
+
+def add_script_responses_to_person(scripts_response_hash)
+  scripts_response_hash.each do |script_response_row|
+      person = find_person(script_response_row['person'])
+      if !person.nil?
+        if person['script_responses'].nil?
+          person['script_responses'] = [script_response_row]
+        else
+          person['script_responses'] << script_response_row
+        end
+      end
+    end
 end
