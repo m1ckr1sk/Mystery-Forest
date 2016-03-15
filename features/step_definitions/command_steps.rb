@@ -1,6 +1,6 @@
 require 'cucumber/rspec/doubles'
 
-require_relative 'helpers/location_list_generator'
+require_relative '../../src/location_list_generator'
 require_relative 'helpers/command_injector'
 require_relative '../../src/mystery_forest'
 
@@ -57,8 +57,7 @@ end
 
 Then(/^the game will respond with$/) do |expectations|
   expectations.hashes.each do |row|
-    expected_text = row["output"].chop.reverse.chop.reverse
-    STDOUT.puts("EXPECTED:#{expected_text}")
+    expected_text = row["output"]
     expect(@test_output.output_logged).to include(expected_text)
   end
 end
@@ -69,7 +68,6 @@ Then(/^the game will respond with exactly$/) do |expectations|
     
   if row["output"][0] == "'" then expected_text = row["output"].reverse.chop.reverse else expected_text = row["output"] end
   if expected_text[-1] == "'" then expected_text = expected_text.chop end
-    STDOUT.puts("EXPECTED:#{expected_text}")
     expected_commands << expected_text
   end
   expect(@test_output.output_logged).to match_array(expected_commands)

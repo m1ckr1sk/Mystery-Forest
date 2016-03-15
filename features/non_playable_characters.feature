@@ -1,7 +1,8 @@
 Feature: Non playable characters
 
 Scenario: Should display people in room when a room is entered
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x | location y | description	 |
 |1 | 0          | 0			 | entrance room |
 |2 | 0          | 1			 | north room    |
@@ -22,7 +23,8 @@ Then the game will respond with exactly
 |Thanks for playing!		|
 
 Scenario: Should describe people in room when looked at
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x | location y | description	 |
 |1 | 0          | 0			 | entrance room |
 |2 | 0          | 1			 | north room    |
@@ -52,7 +54,8 @@ Then the game will respond with exactly
 |Thanks for playing!		|
 
 Scenario: Should enable conversations
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x | location y | description	 |
 |1 | 0          | 0			 | entrance room |
 |2 | 0          | 1			 | north room    |

@@ -16,7 +16,8 @@ Then the game will respond with
 |Welcome to the game|
 
 Scenario: Entering a room should describe the room
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x| location y| description	|
 |1 | 0         | 0			|entrance room|
 When I issue no commands
@@ -27,7 +28,8 @@ Then the game will respond with
 |entrance room|
 
 Scenario: Moving to a new room should describe new room
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x| location y| description	|
 |1 | 0         | 0			|entrance room|
 |2 | 0         | 1			|north room|
@@ -51,7 +53,8 @@ Then the game will respond with exactly
 |Thanks for playing!|
 
 Scenario: Moving to a new room using abbreviation should move to new room
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x| location y| description	|
 |1 | 0         | 0			|entrance room|
 |2 | 0         | 1			|north room|
@@ -75,7 +78,8 @@ Then the game will respond with exactly
 |Thanks for playing!|
 
 Scenario: Moving to a new room that doesn't exist should re show valid directions
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x| location y| description	|
 |1 | 0         | 0			|entrance room|
 |2 | 0         | 1			|north room|
@@ -99,7 +103,8 @@ Then the game will respond with exactly
 |Thanks for playing!|
 
 Scenario: Invalid commands should re show valid directions
-Given that I have some rooms
+Given that I have a welcome message "welcome"
+And that I have some rooms
 |id| location x| location y| description	|
 |1 | 0         | 0			|entrance room|
 |2 | 0         | 1			|north room|
