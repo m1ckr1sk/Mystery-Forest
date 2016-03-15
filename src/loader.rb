@@ -14,8 +14,22 @@ locations << Location.new(Point.new(0, 1), Room.new("You seem to be in an area w
 locations << Location.new(Point.new(1, 0), Room.new("The mist is as thick as ever, a dense, white sheet."))
 locations << Location.new(Point.new(1, 1), Room.new( "There must be a clearing in the trees here, you can see a halo where the sun must be shining from above."))
 locations << Location.new(Point.new(2, 1), Room.new("You think you can see a faint path beneath the mist."))
+  
+actions = {
+            greet: ["'Hello,' the man smiles at you.", [:ask_purpose]],
+            purpose: ["'I am here to guide you.'", [:bye]],
+            bye: ["'I will see you later.'", []]
+          }
+          
+responses = {
+            ask_purpose: ["'What are you doing here?'", :purpose],
+            bye: ["'Good bye.'", :bye]
+          }
+script_actions = ScriptActions.new(actions)
+script_responses = ScriptResponses.new(responses)
+script = Script.new(script_actions,script_responses)
 locations << Location.new(Point.new(3, 1), Room.new("The mist drapes over yourself and the trees, creating a heavy blanket.",[],[
-  Person.new("Malich", "An old man, face coated in a fine dust of gray facial hair. He is wearing a dull blue robe and staring at you, waiting for you to do something.", Script.new)
+  Person.new("Malich", "An old man, face coated in a fine dust of gray facial hair. He is wearing a dull blue robe and staring at you, waiting for you to do something.", script)
 ]))
 locations << Location.new(Point.new(4, 0), Room.new("You can see tall shadows surrounding you. Not trees. They feel cold and hard like stone."))
 locations << Location.new(Point.new(4, 1), Room.new("You can feel the firm stone beneath your feet."))

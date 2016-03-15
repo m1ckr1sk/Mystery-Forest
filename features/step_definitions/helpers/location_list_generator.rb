@@ -11,6 +11,9 @@ class LocationListGenerator
       people_for_room = []
       if !row['people'].nil?
         row['people'].each do |person_to_add|
+          person_to_add['script_actions'].each do |script_actions|
+            STDOUT.puts("ADDING ACTIONS")
+          end
           people_for_room << Person.new(person_to_add['name'],person_to_add['description'],nil)
         end
       end

@@ -1,9 +1,6 @@
 class ScriptResponses
-  def initialize
-    @responses = {
-            ask_purpose: ["'What are you doing here?'", :purpose],
-            bye: ["'Good bye.'", :bye]
-          }
+  def initialize(responses)
+    @responses = responses
   end
   
   def response_at_index index

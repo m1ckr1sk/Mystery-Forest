@@ -67,7 +67,7 @@ class MysteryForest
     when /^look (.*)$/
       look_action command.at(1)
     when /^talk (.*)$/
-      talk_person command.at(1)
+      talk_action command.at(1)
     when "inventory"
       @output.send_output "You are holding: " + @player.items.collect { |item| item.to_s }.join(", ")
     when "quit"

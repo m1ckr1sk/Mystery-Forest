@@ -77,6 +77,14 @@ def create_single_room
   return [{'id' => '1', 'location x' => '0','location y' => '0','description' => 'You are in the first room 0,0'}]
 end
 
+Given(/^I have some script actions$/) do |table|
+  add_script_actions_to_person(table.hashes)
+end
+
+Given(/^I have some script responses$/) do |table|
+  add_script_responses_to_person(table.hashes)
+end
+
 def add_items_to_locations(items_hash)
   items_hash.each do |item_row|
     if room = @locations_hash.find { |k,v| k.to_s[item_row['room']] }
@@ -96,6 +104,30 @@ def add_people_to_locations(people_hash)
         room['people'] = [people_row]
       else
         room['people'] << people_row
+      end
+    end
+  end
+end
+
+def add_script_actions_to_person(scripts_action_hash)
+  scripts_action_hash.each do |script_action_row|
+    if person = @locations_hash.find { |k,v| k.to_s[script_action_row['person']] }
+      if person['script_actions'].nil?
+        person['script_actions'] = [script_action_row]
+      else
+        person['script_actions'] << script_action_row
+      end
+    end
+  end
+end
+
+def add_script_responses_to_person(scripts_response_hash)
+  scripts_response_hash.each do |script_response_row|
+    if person = @locations_hash.find { |k,v| k.to_s[script_response_row['person']] }
+      if person['script_responses'].nil?
+        person['script_responses'] = [script_response_row]
+      else
+        person['script_responses'] << script_response_row
       end
     end
   end

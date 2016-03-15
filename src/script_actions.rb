@@ -1,10 +1,9 @@
+require 'json'
+
 class ScriptActions
-  def initialize
-    @actions = {
-            greet: ["'Hello,' the man smiles at you.", [:ask_purpose]],
-            purpose: ["'I am here to guide you.'", [:bye]],
-            bye: ["'I will see you later.'", []]
-          }
+  def initialize(actions)
+    @actions = actions
+    STDOUT.puts @actions.to_json
   end
   
   def first_action
