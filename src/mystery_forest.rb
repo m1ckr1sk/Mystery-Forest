@@ -8,22 +8,22 @@ require_relative 'point'
 require_relative 'command'
 require_relative 'command_store'
 require_relative 'hint_giver'
-require_relative 'triggers'
 require_relative 'wrapped_screen_output'
 require_relative 'stdin_input'
 
 class MysteryForest
   def initialize(input, output,environment)
-    # command to be performed
-    @cmmnd = Command.new
-    @triggers = Triggers.new
-    @hint_giver = HintGiver.new
     @output = output
     @input = input
-    @quit_game = false
     @environment = environment
-    @player = Player.new(@environment)
+    
+    @cmmnd = Command.new
+    @hint_giver = HintGiver.new
     @command_store = CommandStore.new
+    @quit_game = false
+    
+    @player = Player.new(@environment)
+    
   end
 
   # the main game loop
@@ -107,7 +107,7 @@ class MysteryForest
   # triggers are things that happen when a certain action is triggered
   # by an event, such as a player moving to a new room for the first time
   def perform_triggers
-    trigger_outcome = @triggers.check_triggers(@player)
+    trigger_outcome = @environment.check_triggers(@player)
     @output.send_output trigger_outcome if trigger_outcome != ''
   end
 

@@ -29,6 +29,9 @@ And I have some script responses
 | person | response 	 | text 						| next actions 		|
 | 1      | ask_purpose   | 'What are you doing here?'   | purpose			|
 | 1      | bye   		 | 'Good bye.'   				| bye				|
+And that I have some triggers
+|room| name		 | location x | location y | trigger output	 													|	
+|1 	 | trip_root | 2          | 1		   | You trip over a root, grabbing out to a tree to keep your balance. |
 When I issue the commands
 |command		    |
 |n					|

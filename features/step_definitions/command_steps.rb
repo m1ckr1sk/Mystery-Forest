@@ -34,6 +34,10 @@ Given(/^I have some people in the rooms$/) do |people_table|
   add_people_to_locations(people_table.hashes)
 end
 
+Given(/^that I have some triggers$/) do |trigger_table|
+  add_triggers_to_environment(trigger_table.hashes)
+end
+
 When(/^I issue no commands$/) do
   @game = MysteryForest.new(CommandInjector.new([]), @test_output, create_environment)
   @game.run
@@ -65,9 +69,9 @@ end
 Then(/^the game will respond with exactly$/) do |expectations|
   expected_commands = []
   expectations.hashes.each do |row|
-    
-  if row["output"][0] == "'" then expected_text = row["output"].reverse.chop.reverse else expected_text = row["output"] end
-  if expected_text[-1] == "'" then expected_text = expected_text.chop end
+
+    if row["output"][0] == "'" then expected_text = row["output"].reverse.chop.reverse else expected_text = row["output"] end
+    if expected_text[-1] == "'" then expected_text = expected_text.chop end
     expected_commands << expected_text
   end
   expect(@test_output.output_logged).to match_array(expected_commands)
@@ -75,7 +79,8 @@ end
 
 def create_environment
   room_list = RoomList.new(LocationListGenerator.generate_location_list(@locations_hash))
-  environment = Environment.new(room_list)
+  triggers = if @triggers_hash.nil? then {} else @triggers_hash end
+  environment = Environment.new(room_list, triggers)
   environment.set_greeting(@greeting)
   return environment
 end
@@ -157,4 +162,12 @@ def add_script_responses_to_person(scripts_response_hash)
       end
     end
   end
+end
+
+def add_triggers_to_environment(triggers_hash)
+  @triggers_hash = {}
+  triggers_hash.each do |trigger_row|
+    @triggers_hash[trigger_row["name"]] = {"triggered" => 0, "location_x" => trigger_row["location x"].to_i,"location_y" => trigger_row["location y"].to_i,"trigger_output" => trigger_row["trigger output"]}
+  end
+  puts "TRIGGERS #{@triggers_hash}"
 end
