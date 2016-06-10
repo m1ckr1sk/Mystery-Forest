@@ -99,6 +99,7 @@ Then the game will respond with exactly
 | 1. 'Good bye.'' |
 | ': ' |
 | clear |
+| ''I will see you later.''|
 | '' |
 | The mist drapes over yourself and the trees, creating a heavy blanket. |
 | You see: Malich |

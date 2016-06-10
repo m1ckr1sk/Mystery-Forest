@@ -22,7 +22,6 @@ class Environment
   def check_triggers player
     trigger_output = ''
     @triggers.each do |trigger|
-      STDOUT.puts("CHECKING TRIGGER:#{trigger}")
       if trigger[1]["triggered"] == 0 then
         if player.location == Point.new(trigger[1]["location_x"], trigger[1]["location_y"]) then
           trigger_output = trigger[1]["trigger_output"]

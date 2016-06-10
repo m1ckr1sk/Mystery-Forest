@@ -18,7 +18,7 @@ class LocationListGenerator
           person_script_responses = {}
           if person_to_add.include?'script_actions'
             person_to_add['script_actions'].each do |script_actions|
-              response = if script_actions['response'] == '' then [] else [script_actions['response'].to_sym] end
+              response = if script_actions['response'] == '' then [] else string_to_symbol_array(script_actions['response']) end
               person_script_actions[script_actions['action'].to_sym] = [script_actions['text'],response]
             end
           end
@@ -34,5 +34,14 @@ class LocationListGenerator
       locations << Location.new(Point.new(row["location x"].to_i,row["location y"].to_i),Room.new(row["description"],items_for_room,people_for_room))
     end
     return locations
+  end
+  
+  def self.string_to_symbol_array(string_to_convert)
+    responses = []
+    string_to_convert.gsub(/\s+/,"").split(',').each do |response_string|
+      responses << response_string.to_sym
+    end
+    STDOUT.puts("RESPONSES #{responses}")
+    return responses
   end
 end

@@ -9,9 +9,9 @@ class Script
     @actions = actions
     @responses = responses
   end
-  
+
   def run input, output, name
-    
+
     current_action = @actions.first_action
     current_responses = @actions.current_responses current_action, @responses
     num_responses = current_responses.length
@@ -35,6 +35,7 @@ class Script
       current_responses = @actions.current_responses current_action, @responses
       num_responses = current_responses.length
     end until num_responses == 0
+    output.send_output @actions.action_output(current_action)
   end
 end
 
